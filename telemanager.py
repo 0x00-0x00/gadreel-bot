@@ -50,14 +50,11 @@ storage_folders = {
 
 def look_for_file(keyword):
     results = set()
-    print("keyword is {0}".format(keyword))
     for root, dirc, files in os.walk(cache_dir):
         for file in files:
-            print("File is {0}".format(file))
             if keyword.lower() in file.lower():
                 path = ''.join(os.path.join(root, file))
                 results.add(path)
-                print("File {0} added.".format(file))
     return results
 
 def search_pattern(txt):
