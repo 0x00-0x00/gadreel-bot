@@ -50,11 +50,14 @@ storage_folders = {
 
 def look_for_file(keyword):
     results = set()
+    print("keyword is {0}".format(keyword))
     for root, dirc, files in os.walk(cache_dir):
         for file in files:
-            if keyword in file:
+            print("File is {0}".format(file))
+            if keyword.lower() in file.lower():
                 path = ''.join(os.path.join(root, file))
                 results.add(path)
+                print("File {0} added.".format(file))
     return results
 
 def search_pattern(txt):
@@ -124,21 +127,44 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         #  Text data
         elif content_type == "text":
             text = message["text"]
-            insert_data = t1.insert_data([username, text, str(time.time())])
-            db.controller.execute(insert_data)
-            db.save()
-
             #  Search algorithms
             sp = search_pattern(text)
             if sp:
                 files = search_file(sp)
-                if len(files) != 0:
-                    self.sender.sendMessage("Encontrei {0} arquivos com essa palavra.".format(len(files)))
+                if len(files) > 1:
+                    #  Generate a list to send to user(s)
+                    st = str()
+                    fl = ["%s\n" % os.path.basename(x) for x in files]
+                    for e in fl:
+                        st += e
+
+                    template = "Encontrei {0} arquivos com essa palavra:\n{1}".format(len(files), st)
+                    await self.sender.sendMessage(template)
+                elif len(files) == 1:
+                    keyword = os.path.basename(list(files)[0])
+                    file_name = t2.search("FILE_NAME", keyword)
+                    db.controller.execute(file_name)
+                    result = db.controller.get()
+                    for item in result:
+                        fid, user, file_id, file_name = item[0], item[1], item[2], item[3]
+                        await self.sender.sendMessage("Enviando arquivo '{0}' ...".format(file_name))
+
+                        await self.sender.sendDocument(file_id)
+
+                    return 0
+            else:
+                insert_data = t1.insert_data([username, text, str(time.time())])
+                db.controller.execute(insert_data)
+                db.save() #  Store conversation data
+
+
+
 
                 messages = search_messages(sp)
                 if len(messages) != 0:
                     await self._parse_message_results(messages)
                     return 0
+
 
 
         # Document (PDF, .DOCX)
