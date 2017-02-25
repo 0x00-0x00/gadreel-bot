@@ -57,10 +57,34 @@ def look_for_file(keyword):
                 results.add(path)
     return results
 
-def search_file(txt):
+def search_pattern(txt):
     pattern = "(^procurar?|^buscar?|^search?|^pesquisar)\s+(?P<file>[\w\.]+)"
     m = re.match(pattern, txt)
-    return look_for_file(m.groupdict())
+    if not m:
+        return None
+    match = m.groupdict()
+    return match
+
+
+def search_file(match):
+    keyword = match["file"]
+    return look_for_file(keyword)
+
+
+def search_messages(match):
+    keyword = match["file"]
+    db.controller.execute(t1.search("MESSAGE", keyword))
+    results = db.controller.get()
+    return results
+
+def parse_date(d):
+    regex = "(?P<d>[\w]+)\s(?P<m>[\w]+)\s(?P<dn>[\d]+)\s(?P<h>[\d]+:[\d]+:[\d]+)"
+    m = re.match(regex, d)
+    if not m:
+        return None
+    else:
+        return m.groupdict()
+
 
 class BotHandler(telepot.aio.helper.ChatHandler):
     def __init__(self, *args, **kwargs):
@@ -70,7 +94,10 @@ class BotHandler(telepot.aio.helper.ChatHandler):
     @staticmethod
     def _recvd_from(message):
         first_name = message["from"]["first_name"]
-        last_name = message["from"]["last_name"]
+        try:
+            last_name = message["from"]["last_name"]
+        except KeyError:
+            last_name = ""
         username = " ".join([first_name, last_name])
         return first_name, last_name, username
 
@@ -100,12 +127,18 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             insert_data = t1.insert_data([username, text, str(time.time())])
             db.controller.execute(insert_data)
             db.save()
-            files = search_file(text)
-            if len(files) != 0:
-                self.sender.sendMessage("Encontrei {0} arquivos com essa palavra.".format(len(files)))
-            else:
-                self.sender.sendMessage("Nenhum arquivo foi encontrado.")
 
+            #  Search algorithms
+            sp = search_pattern(text)
+            if sp:
+                files = search_file(sp)
+                if len(files) != 0:
+                    self.sender.sendMessage("Encontrei {0} arquivos com essa palavra.".format(len(files)))
+
+                messages = search_messages(sp)
+                if len(messages) != 0:
+                    await self._parse_message_results(messages)
+                    return 0
 
 
         # Document (PDF, .DOCX)
@@ -143,6 +176,33 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             # Send unknown type message
             await self.sender.sendMessage("Tipo de entrada de dados \
                     desconhecida!")
+
+
+    async def _parse_message_results(self, results):
+        """
+        Parse a maximum of 10 posts about the topic
+        """
+        output = []
+        n = 10
+        if len(results) > n:
+            for _ in range(n):
+                output.append(results.pop())
+        else:
+            for _ in range(len(results)):
+                output.append(results.pop())
+
+        str_output = ""
+        for element in output:
+            mid, user, msg, timestamp = element[0], element[1], element[2], element[3]
+            timestamp = time.ctime(float(timestamp))
+            date = parse_date(timestamp)
+            if not date:
+                print("[+] Erro convertendo timestamp")
+                return 1
+
+            template = "No dia {0} de {1} as {2}, o usuario {3} disse:\n{4}".format(date["dn"], date["m"], date["h"], user, msg)
+            await self.sender.sendMessage(template)
+        return 0
 
 
 bot = telepot.aio.DelegatorBot(TOKEN, [
