@@ -48,15 +48,6 @@ storage_folders = {
         }
 
 
-def look_for_file(keyword):
-    results = set()
-    for root, dirc, files in os.walk(cache_dir):
-        for file in files:
-            if keyword.lower() in file.lower():
-                path = ''.join(os.path.join(root, file))
-                results.add(path)
-    return results
-
 def search_pattern(txt):
     pattern = "(^procurar?|^buscar?|^search?|^pesquisar)\s+(?P<file>[\w\.]+)"
     m = re.match(pattern, txt)
@@ -67,6 +58,22 @@ def search_pattern(txt):
 
 
 def search_file(match):
+    """
+    Function to look for files based on regex match
+    """
+
+    def look_for_file(keyword):
+        """
+        Traverse the file directory
+        """
+        results = set()
+        for root, dirc, files in os.walk(cache_dir):
+            for file in files:
+                if keyword.lower() in file.lower():
+                    path = ''.join(os.path.join(root, file))
+                    results.add(path)
+        return results
+
     keyword = match["file"]
     return look_for_file(keyword)
 
