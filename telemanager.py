@@ -84,6 +84,7 @@ def search_messages(match):
     results = db.controller.get()
     return results
 
+
 def parse_date(d):
     regex = "(?P<d>[\w]+)\s(?P<m>[\w]+)\s(?P<dn>[\d]+)\s(?P<h>[\d]+:[\d]+:[\d]+)"
     m = re.match(regex, d)
@@ -127,7 +128,6 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             await self.sender.sendMessage("Imagem '{0}' baixada com sucesso!".format(photo_id))
 
-
         #  Text data
         elif content_type == "text":
             text = message["text"]
@@ -159,17 +159,12 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             else:
                 insert_data = t1.insert_data([username, text, str(time.time())])
                 db.controller.execute(insert_data)
-                db.save() #  Store conversation data
-
-
-
+                db.save()  # Store conversation data
 
                 messages = search_messages(sp)
                 if len(messages) != 0:
                     await self._parse_message_results(messages)
                     return 0
-
-
 
         # Document (PDF, .DOCX)
         elif content_type == "document":
@@ -194,19 +189,18 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             db.controller.execute(insert_data)
             db.save()
 
-            await self.sender.sendMessage("Baixando video {0}".format(video_name))
+            await self.sender.sendMessage("Baixando video {0} ...".format(video_name))
 
             if not os.path.exists(cache_dir + os.sep + video_name):
                 await self.bot.download_file(video_id, cache_dir + os.sep + video_name)
 
             await self.sender.sendMessage("Video '{0}' baixado com sucesso!".format(video_name))
 
-
         else:
             # Send unknown type message
             await self.sender.sendMessage("Tipo de entrada de dados \
-                    desconhecida!")
-
+                    desconhecida! \nContent-Type: {0}".format(content_type))
+            print(content_type, message)
 
     async def _parse_message_results(self, results):
         """
