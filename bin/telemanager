@@ -70,7 +70,7 @@ def search_messages(match):
 def parse_date(d):
     #  Log for debugging purposes.
     log.debug("Date data: {0}".format(d))
-    regex = "(?P<d>[\w]+)\s(?P<m>[\w]+)\s(?P<dn>[\d]+)\s(?P<h>[\d]+:[\d]+:[\d]+)"
+    regex = "(?P<d>[\w]+)\s+(?P<m>[\w]+)\s+(?P<dn>[\d]+)\s+(?P<h>[\d]+:[\d]+:[\d]+)"
     m = re.match(regex, d)
     if not m:
         return None
@@ -124,7 +124,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             if sp:
 
                 messages = search_messages(sp)
-                if len(messages) != 0:
+                if len(messages) > 0:
                     await self._parse_message_results(messages)
                     return 0
 
