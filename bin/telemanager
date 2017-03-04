@@ -68,6 +68,8 @@ def search_messages(match):
 
 
 def parse_date(d):
+    #  Log for debugging purposes.
+    log.debug("Date data: {0}".format(d))
     regex = "(?P<d>[\w]+)\s(?P<m>[\w]+)\s(?P<dn>[\d]+)\s(?P<h>[\d]+:[\d]+:[\d]+)"
     m = re.match(regex, d)
     if not m:
