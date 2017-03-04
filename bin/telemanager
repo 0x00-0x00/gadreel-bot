@@ -126,7 +126,6 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 messages = search_messages(sp)
                 if len(messages) > 0:
                     await self._parse_message_results(messages)
-                    return 0
 
                 files = search_file(sp)
                 if len(files) > 1:
