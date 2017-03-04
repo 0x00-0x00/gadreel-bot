@@ -115,6 +115,10 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         #  Text data
         elif content_type == "text":
             text = message["text"]
+
+            #  Logging for debugging purposes.
+            log.debug("Received message: {0}".format(text))
+
             #  Search algorithms
             sp = search_pattern(text)
             if sp:
