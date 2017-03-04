@@ -122,6 +122,12 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             #  Search algorithms
             sp = search_pattern(text)
             if sp:
+
+                messages = search_messages(sp)
+                if len(messages) != 0:
+                    await self._parse_message_results(messages)
+                    return 0
+
                 files = search_file(sp)
                 if len(files) > 1:
                     #  Generate a list to send to user(s)
@@ -148,11 +154,6 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 insert_data = t1.insert_data([username, text, str(time.time())])
                 db.controller.execute(insert_data)
                 db.save()  # Store conversation data
-
-                messages = search_messages(sp)
-                if len(messages) != 0:
-                    await self._parse_message_results(messages)
-                    return 0
 
         # Document (PDF, .DOCX)
         elif content_type == "document":
