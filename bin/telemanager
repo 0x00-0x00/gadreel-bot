@@ -135,11 +135,11 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         task_d = delete_task_regex(text)
 
         if not task_r and not task_l and not task_d:
-            log.debug("No task regex found.")
+            #log.debug("No task regex found.")
             return -1
 
         if task_r:  # Register a task
-            log.debug("Task create found.")
+            #log.debug("Task create found.")
             task = task_r["task"]
             if not task:
                 return -1
@@ -153,7 +153,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             return 0
 
         if task_l:  # List tasks
-            log.debug("Task list found.")
+            #log.debug("Task list found.")
             result = list_all_tasks(chat_id)
             if result == -1:
                 await self.sender.sendMessage(random.choice(cant_find_tasks), parse_mode="Markdown")
@@ -163,7 +163,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             return 0
 
         if task_d:
-            log.debug("Task delete found.")
+            #log.debug("Task delete found.")
             task_id = task_d["task_id"]
             if delete_a_task(task_id) != 0:
                 log.error("Could not delete task.")
