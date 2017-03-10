@@ -29,13 +29,34 @@ def new_task_regex(message):
     else:
         return m.groupdict()
 
+def list_task_regex(message):
+    """
+    Regex to match the task creation request
+    """
+    regex = "^(listar?|list)\s(tarefa(s)?|task(s))"
+    m = re.match(regex, message)
+    if not m:
+        return None
+    else:
+        return m.groupdict()
+
+def delete_task_regex(message):
+    """
+    Regex to match the task creation request
+    """
+    regex = "^(deletar?|remover?|delete?|unregister?|del)\s(tarefa?|task)\s(\"?|')(?P<task>[a-zA-Z0-9\s\/]+)(\"?|')"
+    m = re.match(regex, message)
+    if not m:
+        return None
+    else:
+        return m.groupdict()
 
 def create_new_task(username, chat_id, task):
     """
     Creates a task.
     """
     task_id = generate_new_task_hash()
-    timestamp = time.time()
+    timestamp = str(time.time())
 
     if not db:
         logger.critical("Database is not defined.")
