@@ -71,7 +71,7 @@ def search_messages(match):
 
 def parse_date(d):
     #  Log for debugging purposes.
-    log.debug("Date data: {0}".format(d))
+    #  log.debug("Date data: {0}".format(d))
     regex = "(?P<d>[\w]+)\s+(?P<m>[\w]+)\s+(?P<dn>[\d]+)\s+(?P<h>[\d]+:[\d]+:[\d]+)"
     m = re.match(regex, d)
     if not m:
@@ -113,8 +113,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             if not os.path.exists(cache_dir + os.sep + photo_id):
                 await self.bot.download_file(photo_id, cache_dir + os.sep + photo_id + ".jpg")
-
-            await self.sender.sendMessage(random.choice(image_download).format(photo_id))
+                await self.sender.sendMessage(random.choice(image_download).format(photo_id))
 
         #  Text data
         elif content_type == "text":
@@ -166,7 +165,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             #  Avoiding too much verbose
             #await self.sender.sendMessage("Baixando arquivo {0} ...".format(document_name))
-
+6
             if not os.path.exists(cache_dir + os.sep + document_name):
                 await self.bot.download_file(document_id, cache_dir + os.sep + document_name)
                 await self.sender.sendMessage(random.choice(file_download).format(document_name))
@@ -184,8 +183,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             if not os.path.exists(cache_dir + os.sep + video_name):
                 await self.bot.download_file(video_id, cache_dir + os.sep + video_name)
-
-            await self.sender.sendMessage(random.choice(video_download).format(video_name))
+                await self.sender.sendMessage(random.choice(video_download).format(video_name))
 
         else:
             # Send unknown type message
@@ -194,7 +192,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
     async def _parse_message_results(self, results, n=5):
         """
-        Parse a maximum of 10 posts about the topic
+        Parse a maximum of 5 posts about the topic
         """
         output = []
         if len(results) > n:
