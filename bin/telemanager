@@ -15,6 +15,7 @@ from telepot.aio.delegate import pave_event_space, per_chat_id, create_open
 from telemanager.database import *
 from telemanager.io import *
 from telemanager.talk import *
+from telemanager.tasks import *
 
 
 #  Create the logger object
@@ -95,6 +96,50 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         username = " ".join([first_name, last_name])
         return first_name, last_name, username
 
+    def _message_search(self, message):
+        sp = search_pattern(text)
+        if not sp:
+            return -1
+
+        messages = search_messages(sp)
+        if len(messages) > 0:
+            await self._parse_message_results(messages)
+
+        files = search_file(sp)
+        if len(files) > 1:
+            #  Generate a list to send to user(s)
+            st = str()
+            fl = ["%s\n" % os.path.basename(x) for x in files]
+            for e in fl:
+                st += e
+
+            template = "Encontrei {0} arquivos com essa palavra:\n{1}".format(len(files), st)
+            await self.sender.sendMessage(template)
+        elif len(files) == 1:
+            keyword = os.path.basename(list(files)[0])
+            file_name = t2.search("FILE_NAME", keyword)
+            db.controller.execute(file_name)
+            result = db.controller.get()
+            for item in result:
+                fid, user, file_id, file_name = item[0], item[1], item[2], item[3]
+                await self.sender.sendMessage("Enviando arquivo '{0}' ...".format(file_name))
+                await self.sender.sendDocument(file_id)
+        return 0
+
+    def _tasks(self, message):
+        task_r = new_task_regex(message)
+        if not task_r:
+            return -1
+        print(task_r)
+        return 0
+
+    def _log_message(text, username):
+        insert_data = t1.insert_data([username, text, str(time.time())])
+        db.controller.execute(insert_data)
+        db.save()  # Store conversation data
+        return 0
+
+
     async def on_chat_message(self, message):
         self._count += 1
         content_type, chat_type, chat_id = telepot.glance(message)
@@ -123,37 +168,11 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             log.debug("Received message: {0}".format(text))
 
             #  Search algorithms
-            sp = search_pattern(text)
-            if sp:
+            self._message_search(text)
+            self._tasks(text)
 
-                messages = search_messages(sp)
-                if len(messages) > 0:
-                    await self._parse_message_results(messages)
-
-                files = search_file(sp)
-                if len(files) > 1:
-                    #  Generate a list to send to user(s)
-                    st = str()
-                    fl = ["%s\n" % os.path.basename(x) for x in files]
-                    for e in fl:
-                        st += e
-
-                    template = "Encontrei {0} arquivos com essa palavra:\n{1}".format(len(files), st)
-                    await self.sender.sendMessage(template)
-                elif len(files) == 1:
-                    keyword = os.path.basename(list(files)[0])
-                    file_name = t2.search("FILE_NAME", keyword)
-                    db.controller.execute(file_name)
-                    result = db.controller.get()
-                    for item in result:
-                        fid, user, file_id, file_name = item[0], item[1], item[2], item[3]
-                        await self.sender.sendMessage("Enviando arquivo '{0}' ...".format(file_name))
-                        await self.sender.sendDocument(file_id)
-                    return 0
-            else:
-                insert_data = t1.insert_data([username, text, str(time.time())])
-                db.controller.execute(insert_data)
-                db.save()  # Store conversation data
+            #  Log the messages
+            self._log_message(username, text)
 
         # Document (PDF, .DOCX)
         elif content_type == "document":
