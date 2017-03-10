@@ -86,7 +86,8 @@ def list_all_tasks(chat_id):
     Query for tasks of the same chat_id and returns a list of them
     If the result does not yield any result, returns -1.
     """
-    sql = "SELECT * FROM TASKS WHERE CHAT_ID = '{0}'".format(chat_id)
+    print(chat_id)
+    sql = "SELECT * FROM TASKS".format(chat_id)
     db.controller.execute(sql)
     result = db.controller.get()
     if len(result) == 0:
