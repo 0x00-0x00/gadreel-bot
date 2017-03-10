@@ -114,7 +114,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 st += e
 
             template = "Encontrei {0} arquivos com essa palavra:\n{1}".format(len(files), st)
-            await self.sender.sendMessage(template)
+            await self.sender.sendMessage(template, parse_mode="Markdown")
         elif len(files) == 1:
             keyword = os.path.basename(list(files)[0])
             file_name = t2.search("FILE_NAME", keyword)
@@ -122,7 +122,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             result = db.controller.get()
             for item in result:
                 fid, user, file_id, file_name = item[0], item[1], item[2], item[3]
-                await self.sender.sendMessage("Enviando arquivo '{0}' ...".format(file_name))
+                await self.sender.sendMessage("Enviando arquivo '_{0}_' ...".format(file_name), parse_mode="Markdown")
                 await self.sender.sendDocument(file_id)
         return 0
 
@@ -149,16 +149,16 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 return -1
 
             log.debug("Task created: {0}".format(task))
-            await self.sender.sendMessage("Nova tarefa *registrada*!", parse_mode=telegram.ParseMode.MARKDOWN)
+            await self.sender.sendMessage("Nova tarefa *registrada*!", parse_mode="Markdown")
             return 0
 
         if task_l:  # List tasks
             log.debug("Task list found.")
             result = list_all_tasks(chat_id)
             if result == -1:
-                await self.sender.sendMessage(random.choice(cant_find_tasks))
+                await self.sender.sendMessage(random.choice(cant_find_tasks), parse_mode="Markdown")
                 return 0
-            await self.sender.sendMessage(present_tasks(result), parse_mode=telegram.ParseMode.MARKDOWN)
+            await self.sender.sendMessage(present_tasks(result), parse_mode="Markdown")
             log.debug("Task list sent to {0}".format(username))
             return 0
 
@@ -192,7 +192,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             if not os.path.exists(cache_dir + os.sep + photo_id):
                 await self.bot.download_file(photo_id, cache_dir + os.sep + photo_id + ".jpg")
-                await self.sender.sendMessage(random.choice(image_download).format(photo_id))
+                await self.sender.sendMessage(random.choice(image_download).format(photo_id), parse_mode="Markdown")
 
         #  Text data
         elif content_type == "text":
@@ -221,7 +221,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             if not os.path.exists(cache_dir + os.sep + document_name):
                 await self.bot.download_file(document_id, cache_dir + os.sep + document_name)
-                await self.sender.sendMessage(random.choice(file_download).format(document_name))
+                await self.sender.sendMessage(random.choice(file_download).format(document_name), parse_mode="Markdown")
 
         # Videos (.mp4, .mkv)
         elif content_type == "video":
@@ -236,7 +236,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             if not os.path.exists(cache_dir + os.sep + video_name):
                 await self.bot.download_file(video_id, cache_dir + os.sep + video_name)
-                await self.sender.sendMessage(random.choice(video_download).format(video_name), parse_mode=telegram.ParseMode.MARKDOWN)
+                await self.sender.sendMessage(random.choice(video_download).format(video_name), parse_mode="Markdown")
 
         else:
             # Send unknown type message
@@ -265,7 +265,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 return 1
 
             template = "No dia _{0} de {1} as {2}_, o usuario *{3}* disse:\n'{4}'".format(date["dn"], date["m"], date["h"], user, msg)
-            await self.sender.sendMessage(template, parse_mode=telegram.ParseMode.MARKDOWN)
+            await self.sender.sendMessage(template, parse_mode="Markdown")
         return 0
 
 
