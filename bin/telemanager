@@ -168,8 +168,8 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             log.debug("Received message: {0}".format(text))
 
             #  Search algorithms
-            self._message_search(text)
-            self._tasks(text)
+            await self._message_search(text)
+            await self._tasks(text)
 
             #  Log the messages
             self._log_message(username, text)
