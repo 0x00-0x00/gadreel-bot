@@ -44,7 +44,7 @@ def delete_task_regex(message):
     """
     Regex to match the task creation request
     """
-    regex = "^(deletar?|remover?|delete?|unregister?|del)\s(tarefa?|task)\s(\"?|')(?P<task>[a-zA-Z0-9\s\/]+)(\"?|')"
+    regex = "^(deletar?|delete?|del?|concluir?|finish)\s+(task(s)?|tarefa?|tarefas)\s+('?|\")(?P<task_id>[0-9A-Za-z]+)('?|\")"
     m = re.match(regex, message)
     if not m:
         return None
@@ -75,7 +75,7 @@ def delete_a_task(task_id):
     if not db:
         logger.critical("Database is not defined.")
 
-    sql = "DELETE FROM TASKS WHERE TASK_ID = '{0}'".format(task_id)
+    sql = "UPDATE TASKS SET STATUS = 'CLOSED' WHERE CHAT_ID = '{0}'".format(task_id)
     db.controller.execute(sql)
     db.save()
     return 0
@@ -99,7 +99,7 @@ def present_tasks(task_list):
     Given a task set, returns a string object presenting the data.
     """
     task_n = len(task_list)
-    header = "Existem {0} tarefas que necessitam da sua atencao:\n".format(task_n)
+    header = "Existem {0} tarefas que necessitam da sua atencao:\n\n".format(task_n)
     body = ""
     for task in task_list:
         # [(1, 'Dade Murphy', '193665372', 'f0287edaa341e5fb7eccfe7b6a43d9e3c2607cd60023877b10db9b004215264e', 'tarefa alex marino 13/03', 'OPEN', '1489168850.2677088')]
