@@ -18,3 +18,10 @@ video_download = [
     "Obrigado, baixei seu video. ['{0}']",
     "Download de video completo. ['{0}']"
 ]
+
+cant_find_tasks = [
+    "Nao encontrei nenhuma tarefa.",
+    "Nao foram encontradas tarefas.",
+    "Nenhuma tarefa foi encontrada.",
+    "Nao existe tarefas."
+]

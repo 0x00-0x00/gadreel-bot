@@ -15,7 +15,7 @@ from telepot.aio.delegate import pave_event_space, per_chat_id, create_open
 from telemanager.database import *
 from telemanager.io import *
 from telemanager.talk import *
-from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task
+from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task, present_tasks
 
 
 #  Create the logger object
@@ -153,7 +153,12 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         if task_l:  # List tasks
             log.debug("Task list found.")
-            print(list_all_tasks(chat_id))
+            result = list_all_tasks(chat_id)
+            if result == -1:
+                await self.sender.sendMessage(random.choice(cant_find_tasks))
+                return 0
+            await self.sender.sendMessage(present_tasks(result))
+            log.debug("Task list sent to {0}".format(username))
             return 0
 
         if task_d:
