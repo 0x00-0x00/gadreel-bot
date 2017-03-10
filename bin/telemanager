@@ -96,7 +96,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         username = " ".join([first_name, last_name])
         return first_name, last_name, username
 
-    async def _message_search(self, message):
+    async def _message_search(self, text):
         sp = search_pattern(text)
         if not sp:
             return -1
@@ -126,8 +126,8 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 await self.sender.sendDocument(file_id)
         return 0
 
-    async def _tasks(self, message):
-        task_r = new_task_regex(message)
+    async def _tasks(self, text):
+        task_r = new_task_regex(text)
         if not task_r:
             return -1
         print(task_r)
