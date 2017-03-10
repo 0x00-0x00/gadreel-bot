@@ -15,7 +15,7 @@ from telepot.aio.delegate import pave_event_space, per_chat_id, create_open
 from telemanager.database import *
 from telemanager.io import *
 from telemanager.talk import *
-from telemanager.tasks import new_task_regex
+from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task
 
 
 #  Create the logger object
@@ -126,12 +126,34 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 await self.sender.sendDocument(file_id)
         return 0
 
-    async def _tasks(self, text):
+    async def _tasks(self, username, chat_id, text):
+        """
+        Function handler for managing tasks
+        """
         task_r = new_task_regex(text)
-        if not task_r:
+        task_l = list_task_regex(text)
+        task_d = delete_task_regex(text)
+
+        if not task_r and not task_l and not task_d:
             return -1
-        print(task_r)
-        return 0
+
+        if task_r:  # Register a task
+            task = task_r["task"]
+            if not task:
+                return -1
+
+            if create_new_task(username, chat_id, task) != 0:
+                logger.error("Could not create task: {0}".format(task))
+                return -1
+            return 0
+
+        if task_l:  # List tasks
+            print(list_all_tasks(chat_id))
+            return 0
+
+        if task_d:
+            return 0
+        return -1
 
     def _log_message(self, text, username):
         insert_data = t1.insert_data([username, text, str(time.time())])
@@ -169,7 +191,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             #  Search algorithms
             await self._message_search(text)
-            await self._tasks(text)
+            await self._tasks(username, chat_id, text)
 
             #  Log the messages
             self._log_message(username, text)
