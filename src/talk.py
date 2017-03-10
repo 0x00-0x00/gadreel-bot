@@ -30,7 +30,7 @@ cant_find_tasks = [
 deleted_tasks = [
     "Pronto. Sua tarefa foi *concluida*.",
     "Tarefa *concluida*.",
-    "Ok. _Good to go_!",
+    "Ok. _Good_ _to_ _go_!",
     "O status da tarefa foi definido como '*FECHADO*'",
     "Nao se preocupe _mais_ com esta tarefa."
 ]
