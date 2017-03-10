@@ -75,7 +75,7 @@ def delete_a_task(task_id):
     if not db:
         logger.critical("Database is not defined.")
 
-    sql = "UPDATE TASKS SET STATUS = 'CLOSED' WHERE CHAT_ID = '{0}'".format(task_id)
+    sql = "UPDATE TASKS SET STATUS = 'CLOSED' WHERE TASK_ID = '{0}'".format(task_id)
     db.controller.execute(sql)
     db.save()
     return 0
