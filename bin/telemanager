@@ -149,6 +149,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 return -1
 
             log.debug("Task created: {0}".format(task))
+            await self.sender.sendMessage("Nova tarefa *registrada*!", parse_mode=telegram.ParseMode.MARKDOWN)
             return 0
 
         if task_l:  # List tasks
@@ -157,7 +158,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             if result == -1:
                 await self.sender.sendMessage(random.choice(cant_find_tasks))
                 return 0
-            await self.sender.sendMessage(present_tasks(result))
+            await self.sender.sendMessage(present_tasks(result), parse_mode=telegram.ParseMode.MARKDOWN)
             log.debug("Task list sent to {0}".format(username))
             return 0
 
@@ -235,7 +236,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             if not os.path.exists(cache_dir + os.sep + video_name):
                 await self.bot.download_file(video_id, cache_dir + os.sep + video_name)
-                await self.sender.sendMessage(random.choice(video_download).format(video_name))
+                await self.sender.sendMessage(random.choice(video_download).format(video_name), parse_mode=telegram.ParseMode.MARKDOWN)
 
         else:
             # Send unknown type message
@@ -263,8 +264,8 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 print("[+] Erro convertendo timestamp")
                 return 1
 
-            template = "No dia {0} de {1} as {2}, o usuario {3} disse:\n{4}".format(date["dn"], date["m"], date["h"], user, msg)
-            await self.sender.sendMessage(template)
+            template = "No dia _{0} de {1} as {2}_, o usuario *{3}* disse:\n'{4}'".format(date["dn"], date["m"], date["h"], user, msg)
+            await self.sender.sendMessage(template, parse_mode=telegram.ParseMode.MARKDOWN)
         return 0
 
 
