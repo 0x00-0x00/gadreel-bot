@@ -22,7 +22,7 @@ def new_task_regex(message):
     """
     Regex to match the task creation request
     """
-    regex = "^(criar?|nova?|new?|registrar?|register)\s?|nova?|(tarefa?|task)[^>](?P<task>[a-zA-Z0-9\s]+)"
+    regex = "^(criar?|nova?|new?|registrar?|register)\s(tarefa?|task)\s("?|')(?P<task>[a-zA-Z0-9\s\/]+)("?|')"
     m = re.match(regex, message)
     if not m:
         return None
@@ -31,6 +31,9 @@ def new_task_regex(message):
 
 
 def create_new_task(username, chat_id, task):
+    """
+    Creates a task.
+    """
     task_id = generate_new_task_hash()
     timestamp = time.time()
 
@@ -38,7 +41,20 @@ def create_new_task(username, chat_id, task):
         logger.critical("Database is not defined.")
         return -1
 
-    sql = t3.insert_data([username, str(chat_id), task_id, task, timestamp])
+    sql = t3.insert_data([username, str(chat_id), task_id, task, "OPEN", timestamp])
+    db.controller.execute(sql)
+    db.save()
+    return 0
+
+
+def delete_a_task(task_id):
+    """
+    Deletes a task.
+    """
+    if not db:
+        logger.critical("Database is not defined.")
+
+    sql = "DELETE FROM TASKS WHERE TASK_ID = '{0}'".format(task_id)
     db.controller.execute(sql)
     db.save()
     return 0
