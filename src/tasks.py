@@ -86,7 +86,6 @@ def list_all_tasks(chat_id):
     Query for tasks of the same chat_id and returns a list of them
     If the result does not yield any result, returns -1.
     """
-    print(chat_id)
     sql = "SELECT * FROM TASKS WHERE CHAT_ID = '{0}' AND STATUS = 'OPEN'".format(chat_id)
     db.controller.execute(sql)
     result = db.controller.get()
@@ -105,5 +104,5 @@ def present_tasks(task_list):
     for task in task_list:
         # [(1, 'Dade Murphy', '193665372', 'f0287edaa341e5fb7eccfe7b6a43d9e3c2607cd60023877b10db9b004215264e', 'tarefa alex marino 13/03', 'OPEN', '1489168850.2677088')]
         task_id, user, chat_id, task_hash, task_text, status, timestamp = task
-        body += "Task id: {0}\n{1}\n\n".format(task_hash, task_text)
+        body += "Task id: _{0}_\n*{1}*\n\n".format(task_hash, task_text)
     return header + body
