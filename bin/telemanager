@@ -135,29 +135,29 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         task_d = delete_task_regex(text)
 
         if not task_r and not task_l and not task_d:
-            logger.debug("No task regex found.")
+            log.debug("No task regex found.")
             return -1
 
         if task_r:  # Register a task
-            logger.debug("Task create found.")
+            log.debug("Task create found.")
             task = task_r["task"]
             if not task:
                 return -1
 
             if create_new_task(username, chat_id, task) != 0:
-                logger.error("Could not create task: {0}".format(task))
+                log.error("Could not create task: {0}".format(task))
                 return -1
 
-            logger.debug("Task created: {0}".format(task))
+            log.debug("Task created: {0}".format(task))
             return 0
 
         if task_l:  # List tasks
-            logger.debug("Task list found.")
+            log.debug("Task list found.")
             print(list_all_tasks(chat_id))
             return 0
 
         if task_d:
-            logger.debug("Task delete found.")
+            log.debug("Task delete found.")
             return 0
         return -1
 
