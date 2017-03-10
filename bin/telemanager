@@ -165,10 +165,9 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         if task_d:
             log.debug("Task delete found.")
             task_id = task_d["task_id"]
-            print(task_id)
             if delete_a_task(task_id) != 0:
                 log.error("Could not delete task.")
-            await self.sender.sendMessage(random.choie(deleted_tasks))
+            await self.sender.sendMessage(random.choice(deleted_tasks))
         return -1
 
     def _log_message(self, text, username):
