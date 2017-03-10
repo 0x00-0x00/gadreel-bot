@@ -164,7 +164,6 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         if task_d:
             log.debug("Task delete found.")
-            return 0
             task_id = task_d["task_id"]
             print(task_id)
             if delete_a_task(task_id) != 0:
