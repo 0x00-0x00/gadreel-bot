@@ -15,7 +15,7 @@ from telepot.aio.delegate import pave_event_space, per_chat_id, create_open
 from telemanager.database import *
 from telemanager.io import *
 from telemanager.talk import *
-from telemanager.tasks import *
+from telemanager.tasks import new_task_regex
 
 
 #  Create the logger object
