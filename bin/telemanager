@@ -267,8 +267,8 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 print("[+] Erro convertendo timestamp")
                 return 1
 
-            template = "No dia _{0} de {1} as {2}_, o usuario *{3}* disse:\n'{4}'".format(date["dn"], date["m"], date["h"], user, msg)
-            await self.sender.sendMessage(template, parse_mode="Markdown")
+            template = "No dia {0} de {1} as {2}, o usuario {3} disse:\n'{4}'".format(date["dn"], date["m"], date["h"], user, msg)
+            await self.sender.sendMessage(template)
         return 0
 
 
