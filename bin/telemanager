@@ -184,7 +184,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             #  Avoiding too much verbose
             #await self.sender.sendMessage("Baixando arquivo {0} ...".format(document_name))
-6
+
             if not os.path.exists(cache_dir + os.sep + document_name):
                 await self.bot.download_file(document_id, cache_dir + os.sep + document_name)
                 await self.sender.sendMessage(random.choice(file_download).format(document_name))
