@@ -23,6 +23,9 @@ t3 = Table("TASKS", {
     2: ('CHAT_ID', TEXT),
     3: ('TASK_ID', TEXT),
     4: ('TASK_NAME', TEXT),
-    5: ('TIMESTAMP', TEXT),
+    5: ('STATUS', TEXT),
+    6: ('TIMESTAMP', TEXT),
 })
+TEMP_SQL = "DROP TABLE TASKS";
+db.controller.execute(TEMP_SQL)
 db.controller.execute(t3.create())
