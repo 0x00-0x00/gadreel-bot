@@ -26,6 +26,4 @@ t3 = Table("TASKS", {
     5: ('STATUS', TEXT),
     6: ('TIMESTAMP', TEXT),
 })
-TEMP_SQL = "DROP TABLE TASKS";
-db.controller.execute(TEMP_SQL)
 db.controller.execute(t3.create())
