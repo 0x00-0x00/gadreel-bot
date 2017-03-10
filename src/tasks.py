@@ -31,7 +31,7 @@ def new_task_regex(message):
     Regex to match the task creation request
     """
     regex = "^(criar?|nova?|new?|registrar?|register)\s(tarefa?|task)\s(\"?|')(?P<task>[a-zA-Z0-9\s\/:\.\-ç]+)(\"?|')"
-    m = re.match(regex, remove_accents(message))
+    m = re.match(regex, remove_accents(message).decode())
     if not m:
         return None
     else:
