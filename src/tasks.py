@@ -3,7 +3,7 @@ import os
 import hashlib
 import time
 from shemutils.logger import Logger
-from telemanger.database import db, t3
+from telemanager.database import db, t3
 
 
 logger = Logger("Tasks")
