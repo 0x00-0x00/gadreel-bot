@@ -38,7 +38,7 @@ def list_task_regex(message):
     if not m:
         return None
     else:
-        return m.groupdict()
+        return True
 
 def delete_task_regex(message):
     """
