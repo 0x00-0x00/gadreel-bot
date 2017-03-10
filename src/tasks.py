@@ -33,7 +33,7 @@ def list_task_regex(message):
     """
     Regex to match the task creation request
     """
-    regex = "^(listar?|list)\s(tarefa(s)?|task(s))"
+    regex = "^(listar?|list)\s(tarefa?(s)?|task?|tasks)"
     m = re.match(regex, message)
     if not m:
         return None
