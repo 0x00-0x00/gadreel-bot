@@ -4,9 +4,17 @@ import hashlib
 import time
 from shemutils.logger import Logger
 from telemanager.database import db, t3
+import unicodedata
 
 
 logger = Logger("Tasks")
+
+
+
+def remove_accents(input_str):
+    nfkd_form = unicodedata.normalize('NFKD', input_str)
+    only_ascii = nfkd_form.encode('ASCII', 'ignore')
+    return only_ascii
 
 
 def generate_new_task_hash():
@@ -22,8 +30,8 @@ def new_task_regex(message):
     """
     Regex to match the task creation request
     """
-    regex = "^(criar?|nova?|new?|registrar?|register)\s(tarefa?|task)\s(\"?|')(?P<task>[a-zA-Z0-9\s\/:\.\-]+)(\"?|')"
-    m = re.match(regex, message)
+    regex = "^(criar?|nova?|new?|registrar?|register)\s(tarefa?|task)\s(\"?|')(?P<task>[a-zA-Z0-9\s\/:\.\-ç]+)(\"?|')"
+    m = re.match(regex, remove_accents(message))
     if not m:
         return None
     else:
