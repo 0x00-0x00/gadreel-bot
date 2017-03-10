@@ -114,7 +114,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 st += e
 
             template = "Encontrei {0} arquivos com essa palavra:\n{1}".format(len(files), st)
-            await self.sender.sendMessage(template, parse_mode="Markdown")
+            await self.sender.sendMessage(template)
         elif len(files) == 1:
             keyword = os.path.basename(list(files)[0])
             file_name = t2.search("FILE_NAME", keyword)
