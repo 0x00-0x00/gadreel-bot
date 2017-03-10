@@ -5,6 +5,7 @@ import telepot
 import re
 import os
 import time
+import random
 
 #  Load external modules
 from shemutils.logger import Logger
@@ -13,6 +14,7 @@ from telepot.aio.delegate import pave_event_space, per_chat_id, create_open
 #  Load internal modules
 from telemanager.database import *
 from telemanager.io import *
+from telemanager.talk import *
 
 
 #  Create the logger object
@@ -105,12 +107,14 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             insert_data = t2.insert_data([username, photo_id, photo_id])
             db.controller.execute(insert_data)
             db.save()
-            await self.sender.sendMessage("Baixando imagem '{0}' ...".format(photo_id))
+
+            #  Avoiding too much verbose
+            #await self.sender.sendMessage("Baixando imagem '{0}' ...".format(photo_id))
 
             if not os.path.exists(cache_dir + os.sep + photo_id):
                 await self.bot.download_file(photo_id, cache_dir + os.sep + photo_id + ".jpg")
 
-            await self.sender.sendMessage("Imagem '{0}' baixada com sucesso!".format(photo_id))
+            await self.sender.sendMessage(random.choice(image_download).format(photo_id))
 
         #  Text data
         elif content_type == "text":
@@ -145,9 +149,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                     for item in result:
                         fid, user, file_id, file_name = item[0], item[1], item[2], item[3]
                         await self.sender.sendMessage("Enviando arquivo '{0}' ...".format(file_name))
-
                         await self.sender.sendDocument(file_id)
-
                     return 0
             else:
                 insert_data = t1.insert_data([username, text, str(time.time())])
@@ -162,12 +164,12 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             db.controller.execute(insert_data)
             db.save()
 
-            await self.sender.sendMessage("Baixando arquivo {0} ...".format(document_name))
+            #  Avoiding too much verbose
+            #await self.sender.sendMessage("Baixando arquivo {0} ...".format(document_name))
 
             if not os.path.exists(cache_dir + os.sep + document_name):
                 await self.bot.download_file(document_id, cache_dir + os.sep + document_name)
-
-            await self.sender.sendMessage("Arquivo '{0}' baixado com sucesso!".format(document_name))
+                await self.sender.sendMessage(random.choice(file_download).format(document_name))
 
         # Videos (.mp4, .mkv)
         elif content_type == "video":
@@ -177,25 +179,24 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             db.controller.execute(insert_data)
             db.save()
 
-            await self.sender.sendMessage("Baixando video {0} ...".format(video_name))
+            #  Avoiding too much verbose
+            #await self.sender.sendMessage("Baixando video {0} ...".format(video_name))
 
             if not os.path.exists(cache_dir + os.sep + video_name):
                 await self.bot.download_file(video_id, cache_dir + os.sep + video_name)
 
-            await self.sender.sendMessage("Video '{0}' baixado com sucesso!".format(video_name))
+            await self.sender.sendMessage(random.choice(video_download).format(video_name))
 
         else:
             # Send unknown type message
-            await self.sender.sendMessage("Tipo de entrada de dados \
+            logger.debug("Tipo de entrada de dados \
                     desconhecida! \nContent-Type: {0}".format(content_type))
-            print(content_type, message)
 
-    async def _parse_message_results(self, results):
+    async def _parse_message_results(self, results, n=5):
         """
         Parse a maximum of 10 posts about the topic
         """
         output = []
-        n = 10
         if len(results) > n:
             for _ in range(n):
                 output.append(results.pop())
@@ -226,4 +227,3 @@ loop = asyncio.get_event_loop()
 loop.create_task(bot.message_loop())
 log.info("TeleManager bot has started.")
 loop.run_forever()
-
