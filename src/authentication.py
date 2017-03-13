@@ -24,6 +24,9 @@ class AuthenticationCheck(object):
         results = self._get_members()
 
         # Unregistered bot member
+        print(self.requested_id)
+        print(master_id)
+        print(results)
         if self.requested_id is not master_id and len(results) == 0:
             return -1
 
