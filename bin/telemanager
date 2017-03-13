@@ -101,6 +101,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         if not sp:
             return -1
 
+        logger.debug("Trying to find data about '{0}'".format(sp["file"]))
         messages = search_messages(sp)
         if len(messages) > 0:
             await self._parse_message_results(messages)
@@ -202,8 +203,9 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             text = str(message["text"].lower()).replace("'",'"')
 
             #  Logging for debugging purposes.
-            log.debug("Received message: {0}".format(text))
             log.debug("Message FROM object: {0}".format(message["from"]))
+            log.debug("Received message: {0}".format(text))
+
 
             #  Search algorithms
             await self._message_search(text)
