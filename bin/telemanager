@@ -175,6 +175,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         insert_data = t1.insert_data([username, text, str(time.time())])
         db.controller.execute(insert_data)
         db.save()  # Store conversation data
+        logger.debug("Message save to database.\n")
         return 0
 
 
