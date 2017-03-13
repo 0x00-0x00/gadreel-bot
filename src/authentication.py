@@ -27,7 +27,7 @@ class AuthenticationCheck(object):
         print(self.requested_id)
         print(master_id)
         print(results)
-        if self.requested_id is not master_id and len(results) == 0:
+        if self.requested_id != master_id and len(results) == 0:
             return -1
 
         # Exclusive return code for bot master
