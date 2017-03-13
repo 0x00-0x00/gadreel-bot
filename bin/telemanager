@@ -101,7 +101,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         if not sp:
             return -1
 
-        logger.debug("Trying to find data about '{0}'".format(sp["file"]))
+        log.debug("Trying to find data about '{0}'".format(sp["file"]))
         messages = search_messages(sp)
         if len(messages) > 0:
             await self._parse_message_results(messages)
@@ -175,7 +175,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         insert_data = t1.insert_data([username, text, str(time.time())])
         db.controller.execute(insert_data)
         db.save()  # Store conversation data
-        logger.debug("Message save to database.\n")
+        log.debug("Message save to database.\n")
         return 0
 
 
@@ -247,7 +247,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         else:
             # Send unknown type message
-            logger.debug("Tipo de entrada de dados \
+            log.debug("Tipo de entrada de dados \
                     desconhecida! \nContent-Type: {0}".format(content_type))
 
     async def _parse_message_results(self, results, n=5):
