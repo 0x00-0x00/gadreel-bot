@@ -22,6 +22,6 @@ class AuthenticationCheck(object):
         Perform master id and member table checkage
         """
         results = self.get_members()
-        if self.requested_id not masted_id and len(results) == 0:
+        if self.requested_id is not masted_id and len(results) == 0:
             return -1
         return 0
