@@ -68,6 +68,7 @@ def search_messages(match):
     keyword = match["file"]
     db.controller.execute(t1.search("MESSAGE", keyword))
     results = db.controller.get()
+    log.debug("Query returned {0} results.".format(len(results)))
     return results
 
 
