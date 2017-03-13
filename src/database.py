@@ -30,6 +30,9 @@ db.controller.execute(t3.create())
 
 t4 = Table("MEMBERS", {
     1: ('USER_ID', TEXT),
-    2: ('TIMESTAMP', TEXT)
+    2: ('STATUS', TEXT),
+    3: ('TIMESTAMP', TEXT)
 })
+SQL = "DROP TABLE MEMBERS"
+db.controller.execute(SQL)  # Debugging phase
 db.controller.execute(t4.create())

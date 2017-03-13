@@ -189,12 +189,12 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         """
         self._count += 1
         content_type, chat_type, chat_id = telepot.glance(message)
-        #user_id = message["from"]["user_id"]
+        user_id = message["from"]["id"]
         first_name, last_name, username = self._recvd_from(message)
-        #auth = AuthenticationCheck(user_id).check()
-        #if auth == -1:
-        #    log.debug("User #{0} - {1} is not authorized to use my functions.".format(user_id, username))
-        #    return -1
+        auth = AuthenticationCheck(user_id).check()
+        if auth == -1:
+            log.debug("User #{0} - {1} is not authorized to use my functions.".format(user_id, username))
+            return -1
 
         #  Code flow based on content_type
         #  Photos (.jpg, .png)
