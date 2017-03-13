@@ -203,6 +203,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
             #  Logging for debugging purposes.
             log.debug("Received message: {0}".format(text))
+            log.debug("Message FROM object: {0}".format(message["from"]))
 
             #  Search algorithms
             await self._message_search(text)
