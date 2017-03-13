@@ -16,6 +16,7 @@ from telemanager.database import *
 from telemanager.io import *
 from telemanager.talk import *
 from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task, present_tasks
+from telemanager.authentication import AuthenticationCheck
 
 
 #  Create the logger object
