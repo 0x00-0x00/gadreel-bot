@@ -1,5 +1,5 @@
 from telemanager.database import *
-master_id = 0
+master_id = 193665372
 
 class AuthenticationCheck(object):
     """
@@ -22,6 +22,14 @@ class AuthenticationCheck(object):
         Perform master id and member table checkage
         """
         results = self.get_members()
+
+        # Unregistered bot member
         if self.requested_id is not masted_id and len(results) == 0:
             return -1
+
+        # Exclusive return code for bot master
+        if self.requested_id is masted_id:
+            return 1
+
+        #  Ok.
         return 0
