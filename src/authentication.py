@@ -8,7 +8,7 @@ class AuthenticationCheck(object):
     bot folder, ensuring only rightfull data will be disposable.
     """
     def __init__(self, id):
-        self.requested_id = id
+        self.requested_id = int(id)  # User ID
 
     def _get_members(self):
         """
@@ -24,11 +24,11 @@ class AuthenticationCheck(object):
         results = self._get_members()
 
         # Unregistered bot member
-        if self.requested_id is not masted_id and len(results) == 0:
+        if self.requested_id is not master_id and len(results) == 0:
             return -1
 
         # Exclusive return code for bot master
-        if self.requested_id is masted_id:
+        if self.requested_id is master_id:
             return 1
 
         #  Ok.
