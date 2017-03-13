@@ -188,7 +188,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         """
         self._count += 1
         content_type, chat_type, chat_id = telepot.glance(message)
-        user_id = message["from"]["user_id"]
+        #user_id = message["from"]["user_id"]
         first_name, last_name, username = self._recvd_from(message)
         auth = AuthenticationCheck(user_id).check()
         if auth == -1:
