@@ -21,7 +21,7 @@ class AuthenticationCheck(object):
         """
         Perform master id and member table checkage
         """
-        results = self.get_members()
+        results = self._get_members()
 
         # Unregistered bot member
         if self.requested_id is not masted_id and len(results) == 0:
