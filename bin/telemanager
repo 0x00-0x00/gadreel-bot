@@ -172,6 +172,9 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         return -1
 
     def _log_message(self, text, username):
+        """
+        Log the message received into the database.
+        """
         insert_data = t1.insert_data([username, text, str(time.time())])
         db.controller.execute(insert_data)
         db.save()  # Store conversation data
@@ -180,9 +183,17 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
 
     async def on_chat_message(self, message):
+        """
+        Bot Message Handler
+        """
         self._count += 1
         content_type, chat_type, chat_id = telepot.glance(message)
+        user_id = message["from"]["user_id"]
         first_name, last_name, username = self._recvd_from(message)
+        auth = AuthenticationCheck(user_id).check()
+        if auth == -1:
+            log.debug("User #{0} - {1} is not authorized to use my functions.".format(user_id, username))
+            return -1
 
         #  Code flow based on content_type
         #  Photos (.jpg, .png)
@@ -191,9 +202,6 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             insert_data = t2.insert_data([username, photo_id, photo_id])
             db.controller.execute(insert_data)
             db.save()
-
-            #  Avoiding too much verbose
-            #await self.sender.sendMessage("Baixando imagem '{0}' ...".format(photo_id))
 
             if not os.path.exists(cache_dir + os.sep + photo_id):
                 await self.bot.download_file(photo_id, cache_dir + os.sep + photo_id + ".jpg")
