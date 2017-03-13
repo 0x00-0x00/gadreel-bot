@@ -177,7 +177,8 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         """
         Log the message received into the database.
         """
-        insert_data = t1.insert_data([username, text, str(time.time())])
+        #insert_data = t1.insert_data([username, text, str(time.time())])
+        insert_data = t1.insert_data([text, username, str(time.time())])
         print(insert_data)
         db.controller.execute(insert_data)
         db.save()  # Store conversation data
