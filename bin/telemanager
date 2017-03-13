@@ -192,9 +192,9 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         #user_id = message["from"]["user_id"]
         first_name, last_name, username = self._recvd_from(message)
         #auth = AuthenticationCheck(user_id).check()
-        if auth == -1:
-            log.debug("User #{0} - {1} is not authorized to use my functions.".format(user_id, username))
-            return -1
+        #if auth == -1:
+        #    log.debug("User #{0} - {1} is not authorized to use my functions.".format(user_id, username))
+        #    return -1
 
         #  Code flow based on content_type
         #  Photos (.jpg, .png)
