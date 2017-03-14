@@ -65,6 +65,9 @@ def search_file(match):
 
 
 def search_messages(match):
+    """
+    Search messages function handler
+    """
     keyword = match["file"]
     db.controller.execute(t1.search("MESSAGE", keyword))
     results = db.controller.get()
