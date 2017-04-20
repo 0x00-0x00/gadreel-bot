@@ -31,9 +31,9 @@ class MemberRegexHandler(object):
                 return -1
 
         if acc:
-            obj = AcceptMember(req["id"])
+            obj = AcceptMember(acc["id"])
             if obj.status is True:
-                logger.debug("User #{0} acceptance successfully done.".format(req["id"]))
+                logger.debug("User #{0} acceptance successfully done.".format(acc["id"]))
                 return 0
             else:
                 return -1
@@ -86,7 +86,6 @@ class AcceptMember(object):
     """
     def __init__(self, id):
         self.id = id
-        self._accept_member()
         self.status = False
         if self._accept_member() == 0:
             self.status = True
