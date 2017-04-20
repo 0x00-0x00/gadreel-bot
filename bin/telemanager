@@ -140,7 +140,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         if type(text) is bytes:
             text = text.decode()  # Avoid printing 'b' with the string
-        
+
         base64d_r = b64decode_regex(text)
         base64e_r = b64encode_regex(text)
 
@@ -247,6 +247,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         #  Text data
         elif content_type == "text":
+            original_text = message["text"]
             text = str(message["text"].lower()).replace("'",'"')
 
             #  Logging for debugging purposes.
@@ -257,7 +258,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             #  Search algorithms
             await self._message_search(text)
             await self._tasks(username, chat_id, text)
-            await self._base64converter(text)
+            await self._base64converter(original_text)
 
             #  Log the messages
             self._log_message(username, text)

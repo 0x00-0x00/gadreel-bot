@@ -33,6 +33,10 @@ def b64d(message):
             decoded_string = base64.b64decode(to_decode)
         except TypeError:
             decoded_string = base64.b64decode(to_decode.encode())
+
+        if type(decoded_string) is bytes:
+            return decoded_string.decode()
+
         return decoded_string
 
 def b64e(message):
@@ -46,4 +50,7 @@ def b64e(message):
             encoded_string = base64.b64encode(to_encode)
         except TypeError:
             encoded_string = base64.b64encode(to_encode.encode())
+
+        if type(encoded_string) is bytes:
+            return encoded_string.decode()
         return encoded_string
