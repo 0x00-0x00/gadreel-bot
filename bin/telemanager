@@ -265,7 +265,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             if type(original_text) is bytes:
                 original_text = original_text.decode()
             if original_text == "/id":
-                await self.sender.sendMessage("Seu id é: {0}".format(user_id))
+                await self.sender.sendMessage("Telegram ID: {0}".format(user_id))
 
             #  Search algorithms
             await self._message_search(text)
