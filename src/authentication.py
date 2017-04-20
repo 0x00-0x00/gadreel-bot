@@ -103,7 +103,7 @@ class AcceptMember(object):
             for result in results:
                 user_id, status, timestamp = result[1], result[2], result[3]
                 if status == "PENDING":
-                    update_SQL = t4.update_row("MEMBERS", "STATUS", "OK", "USER_ID", user_id)
+                    update_SQL = t4.update_row("STATUS", "OK", "USER_ID", user_id)
                     db.controller.execute(update_SQL)
         return 0
 
