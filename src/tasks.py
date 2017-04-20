@@ -40,7 +40,7 @@ def new_task_regex(message):
     if type(message) is bytes:
         message = message.decode()
     regex = "^(criar?|nova?|new?|add)\s(tarefa?|task)\s(\"?|')(?P<task>[a-zA-Z0-9\s\/:\.\-ç]+)(\"?|')"
-    m = re.match(regex, remove_accents(message).decode())
+    m = re.match(regex, remove_accents(message))
     if not m:
         return None
     else:
