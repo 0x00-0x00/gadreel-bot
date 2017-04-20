@@ -48,4 +48,5 @@ def morse_decode_regex(text):
     if not m:
         return None
     else:
+        print(m.groupdict())
         return m.groupdict()
