@@ -262,6 +262,10 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             #log.debug("Message FROM object: {0}".format(message["from"]))
             #log.debug("Received message: {0}".format(text))
 
+            if type(original_text) is bytes:
+                original_text = original_text.decode()
+            if original_text == "/id":
+                await self.sender.sendMessage("Seu id é: {0}".format(user_id))
 
             #  Search algorithms
             await self._message_search(text)
