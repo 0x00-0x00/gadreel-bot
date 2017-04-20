@@ -15,7 +15,7 @@ from telepot.aio.delegate import pave_event_space, per_chat_id, create_open
 from telemanager.database import *
 from telemanager.io import *
 from telemanager.talk import *
-from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task, present_tasks
+from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task, present_tasks, remove_accents
 from telemanager.authentication import AuthenticationCheck, MemberRegexHandler
 from telemanager.b64decoder import b64decode_regex, b64encode_regex, b64d, b64e
 
@@ -36,7 +36,7 @@ else:
 
 
 def search_pattern(txt):
-    pattern = "(^procurar?|^buscar?|^search?|^pesquisar)\s+(?P<file>[\w\.]+)"
+    pattern = "(^\/procurar?|^\/buscar?|^\/search?|^\/pesquisar)\s+(?P<file>[\w\.]+)"
     m = re.match(pattern, txt)
     if not m:
         return None
@@ -149,17 +149,17 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         if base64d_r:
             decoded_text = b64d(text)
-            log.debug("Base64 decode function activated.")
-            log.debug("To decode text: {0}".format(text))
-            log.debug("Decoded text: {0}".format(decoded_text))
+            #log.debug("Base64 decode function activated.")
+            #log.debug("To decode text: {0}".format(text))
+            #log.debug("Decoded text: {0}".format(decoded_text))
             await self.sender.sendMessage(decoded_text)
             return 0
 
         if base64e_r:
             encoded_text = b64e(text)
-            log.debug("Base64 encode function activated.")
-            log.debug("To encode text: {0}".format(text))
-            log.debug("Encoded text: {0}".format(encoded_text))
+            #log.debug("Base64 encode function activated.")
+            #log.debug("To encode text: {0}".format(text))
+            #log.debug("Encoded text: {0}".format(encoded_text))
             await self.sender.sendMessage(encoded_text)
 
         return 0
@@ -172,6 +172,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         """
         Function handler for managing tasks
         """
+        text = remove_accents(text)
         task_r = new_task_regex(text)
         task_l = list_task_regex(text)
         task_d = delete_task_regex(text)
@@ -255,8 +256,8 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             text = str(message["text"].lower()).replace("'",'"')
 
             #  Logging for debugging purposes.
-            log.debug("Message FROM object: {0}".format(message["from"]))
-            log.debug("Received message: {0}".format(text))
+            #log.debug("Message FROM object: {0}".format(message["from"]))
+            #log.debug("Received message: {0}".format(text))
 
 
             #  Search algorithms

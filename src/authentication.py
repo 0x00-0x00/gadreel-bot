@@ -129,7 +129,6 @@ class AuthenticationCheck(object):
         Perform master id and member table checkage
         """
         results = self._get_members()
-        logger.debug("RESULTS: {0}".format(results))
 
         # Unregistered bot member
         if self.requested_id != master_id and len(results) == 0:

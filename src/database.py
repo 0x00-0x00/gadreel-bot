@@ -33,6 +33,4 @@ t4 = Table("MEMBERS", {
     2: ('STATUS', TEXT),
     3: ('TIMESTAMP', TEXT)
 })
-SQL = "DROP TABLE MEMBERS"
-db.controller.execute(SQL)  # Debugging phase
 db.controller.execute(t4.create())
