@@ -24,7 +24,15 @@ def b64d(message):
     if not m:
         return None
     else:
-        decoded_string = base64.b64decode(m["data"])
+        to_decode = m["data"]
+
+        # Bug Fix #1
+        # Python3.6 requires that a bytes object is used for base64 operations
+        # This way it could be used both on python2.7 and python3.6
+        try:
+            decoded_string = base64.b64decode(to_decode)
+        except TypeError:
+            decoded_string = base64.b64decode(to_decode.encode())
         return base64.b64decode(decoded_string)
 
 def b64e(message):
@@ -33,5 +41,9 @@ def b64e(message):
     if not m:
         return None
     else:
-        encoded_string = base64.b64encode(m["data"])
+        to_encode = m["data"]
+        try:
+            encoded_string = base64.b64encode(to_encode)
+        except TypeError:
+            encoded_string = base64.b64encode(to_encode.encode())
         return base64.b64decode(encoded_string)
