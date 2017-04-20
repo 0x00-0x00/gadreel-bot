@@ -49,7 +49,7 @@ def morse_decode_regex(text):
     if not m:
         return None
     else:
-        last = text.split(" ")[-1:][0]
+        last = text.split(" ")[-1:]
         print(last)
         output = last.replace('"', "")
         print(output)
