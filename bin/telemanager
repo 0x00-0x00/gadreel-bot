@@ -18,7 +18,7 @@ from telemanager.talk import *
 from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task, present_tasks, remove_accents
 from telemanager.authentication import AuthenticationCheck, MemberRegexHandler
 from telemanager.b64decoder import b64decode_regex, b64encode_regex, b64d, b64e
-
+from telemanager.morse_code import morse_encode_regex, morse_decode_regex, morse_encode, morse_decode
 
 #  Create the logger object
 log = Logger("TeleManager")
@@ -133,6 +133,29 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 await self.sender.sendDocument(file_id)
         return 0
 
+    async def _morseHandler(self, text):
+        """
+        Morse code converder new feature.
+        """
+        if type(text) is bytes:
+            text = text.decode()
+
+        morse_e = morse_encode_regex(text)
+        morse_d = morse_decode_regex(text)
+
+        if not morse_e and not morse_d:
+            return -1
+
+        if morse_e:
+            encoded_text = morse_encode(text)
+            await self.sender.sendMessage(encoded_text)
+
+        if morse_d:
+            decoded_text = morse_decode(text)
+            await self.sender.sendMessage(decode_text)
+
+        return 0
+
     async def _base64converter(self, text):
         """
         Base64 converter new feature.
@@ -166,6 +189,10 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
     async def _authHandler(self, text):
         MemberRegexHandler(text)
+        return 0
+
+    async def _morseHandler(self, text):
+        MorseHandler(text, self.sender)
         return 0
 
     async def _tasks(self, username, chat_id, text):
@@ -237,7 +264,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         user_id = message["from"]["id"]
         first_name, last_name, username = self._recvd_from(message)
 
-        # Telegram ID identifier 
+        # Telegram ID identifier
         data_received = message["text"]
         if type(data_received) is bytes:
             data_received = data_received.decode()
@@ -276,6 +303,8 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._tasks(username, chat_id, text)
             await self._base64converter(original_text)
             await self._authHandler(original_text)
+            await self._morseHandler(original_text)
+
 
             #  Log the messages
             self._log_message(username, text)

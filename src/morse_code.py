@@ -34,42 +34,18 @@ def morse_decode(code):
     return out
 
 
-class MorseHandler(object):
-    def __init__(self, message, sender):
-        if type(message) is bytes:
-            message = message.decode()
+def morse_encode_regex(text):
+    regex = "^\/morsee\s+(?P<data>[a-zA-Z0-9]+)"
+    m = re.match(regex, text)
+    if not m:
+        return None
+    else:
+        return m.groupdict()
 
-        self.message = message
-        self.sender = sender
-        self._parse_regex()
-
-    async def _parse_regex(self):
-        decoded = self._decode()
-        encoded = self._encoded()
-        if not decoded and not encoded:
-            return -1
-
-        if encoded:
-            data = encoded["data"]
-            await self.sender.sendMessage(morse_encode(data))
-
-        if decoded:
-            data = decoded["data"]
-            await self.sender.sendMessage(morse_decode(data))
-
-
-    def _encode(self):
-        regex = "^\/morsee\s+(?P<data>[a-zA-Z0-9]+)"
-        m = re.match(regex, self.message)
-        if not m:
-            return None
-        else:
-            return m.groupdict()
-
-    def _decode(self):
-        regex = "^/morsed\s+(?P<data>[a-zA-Z0-9]+)"
-        m = re.match(regex, self.message)
-        if not m:
-            return None
-        else:
-            return m.groupdict()
+def morse_decode_regex(self):
+    regex = "^/morsed\s+(?P<data>[a-zA-Z0-9]+)"
+    m = re.match(regex, text)
+    if not m:
+        return None
+    else:
+        return m.groupdict()
