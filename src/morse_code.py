@@ -35,7 +35,7 @@ def morse_decode(code):
 
 
 def morse_encode_regex(text):
-    regex = "^\/morsee\s+(?P<data>[a-zA-Z0-9]+)"
+    regex = "^\/morsee\s+(?P<data>[a-zA-Z0-9\s]+)"
     m = re.match(regex, text)
     if not m:
         return None
