@@ -33,7 +33,7 @@ def b64d(message):
             decoded_string = base64.b64decode(to_decode)
         except TypeError:
             decoded_string = base64.b64decode(to_decode.encode())
-        return base64.b64decode(decoded_string)
+        return decoded_string
 
 def b64e(message):
     regex = "^\/b64[de]\s(?P<data>[a-zA-Z0-9\=]+)"
@@ -46,4 +46,4 @@ def b64e(message):
             encoded_string = base64.b64encode(to_encode)
         except TypeError:
             encoded_string = base64.b64encode(to_encode.encode())
-        return base64.b64decode(encoded_string)
+        return encoded_string
