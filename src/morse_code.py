@@ -49,9 +49,8 @@ def morse_decode_regex(text):
     if not m:
         return None
     else:
-        last = text.split(" ")[-1:]
+        last = text.replace("/morsed ", "")
         print(last)
         output = last.replace('"', "")
         print(output)
-
         return output
