@@ -66,7 +66,7 @@ class RequestMember(object):
         self.id = int(id)
         self.status = False
         if self._register_new_member() == 0:
-            self.status = False
+            self.status = True
 
     def _register_new_member(self):
         """
@@ -87,6 +87,9 @@ class AcceptMember(object):
     def __init__(self, id):
         self.id = id
         self._accept_member()
+        self.status = False
+        if self._accept_member() == 0:
+            self.status = True
 
     def _accept_member(self):
         """
@@ -103,7 +106,6 @@ class AcceptMember(object):
                 if status == "PENDING":
                     update_SQL = t4.update_row("MEMBERS", "STATUS", "OK", "USER_ID", user_id)
                     db.controller.execute(update_SQL)
-
         return 0
 
 
