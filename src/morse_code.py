@@ -43,11 +43,9 @@ def morse_encode_regex(text):
         return m.groupdict()
 
 def morse_decode_regex(text):
-    print(text)
     regex = '^\/morsed\s+"?|(?P<data>[\.\-\s]+)"?|'
     m = re.match(regex, text)
     if not m:
         return None
     else:
-        print(m.groupdict())
-        return m.groupdict()
+        return text.split(" ")[:-1].replace('"', "")
