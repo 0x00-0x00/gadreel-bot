@@ -8,6 +8,8 @@ logger = Logger("tele-manager")
 
 class MemberRegexHandler(object):
     def __init__(self, message):
+        if type(message) is bytes:
+            message = message.decode()
         self.message = message
         self._parse_regex()
 
@@ -17,6 +19,7 @@ class MemberRegexHandler(object):
 
         #  Returns if no match.
         if not acc and not req:
+            logger.debug("No Member Registration or Accept Regex Match.")
             return 0
 
         if req:
@@ -40,7 +43,7 @@ class MemberRegexHandler(object):
         Tries to identify the message using one regular expression.
         """
         regex = "^(register?|registrar)\s+(?P<id>[\d]+)"
-        m = re.match(regex, self.message.decode())
+        m = re.match(regex, self.message)
         if not m:
             return None
         return m.groupdict()
@@ -50,7 +53,7 @@ class MemberRegexHandler(object):
         Tries to identify the message using one regular expression.
         """
         regex = "^(acc?|accept?|aceitar)\s+(?P<id>[\d]+)"
-        m = re.match(regex, self.message.decode())
+        m = re.match(regex, self.message)
         if not m:
             return None
         return m.groupdict()
