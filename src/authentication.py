@@ -98,7 +98,9 @@ class AcceptMember(object):
             for result in results:
                 user_id, status, timestamp = result[1], result[2], result[3]
                 if status == "PENDING":
-                    update_SQL = t4.update()
+                    update_SQL = t4.update_row("MEMBERS", "STATUS", "OK", "USER_ID", user_id)
+                    db.controller.execute(update_SQL)
+
         return 0
 
 
@@ -123,6 +125,7 @@ class AuthenticationCheck(object):
         Perform master id and member table checkage
         """
         results = self._get_members()
+        logger.debug("RESULTS: {0}".format(results))
 
         # Unregistered bot member
         if self.requested_id != master_id and len(results) == 0:
