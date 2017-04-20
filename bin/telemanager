@@ -148,7 +148,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             log.debug("Base64 decode function activated.")
             log.debug("To decode text: {0}".format(text))
             log.debug("Decoded text: {0}".format(decoded_text))
-            self.sender.sendMessage(decoded_text))
+            self.sender.sendMessage(decoded_text)
             return 0
 
         if base64e_r:
@@ -156,7 +156,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             log.debug("Base64 encode function activated.")
             log.debug("To encode text: {0}".format(text))
             log.debug("Encoded text: {0}".format(encoded_text))
-            self.sender.sendMessage(encoded_text))
+            self.sender.sendMessage(encoded_text)
 
         return 0
 
