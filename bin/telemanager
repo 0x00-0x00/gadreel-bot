@@ -154,7 +154,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         if morse_d:
             to_decode = morse_d["data"]
             decoded_text = morse_decode(to_decode)
-            await self.sender.sendMessage(decode_text)
+            await self.sender.sendMessage(decoded_text)
 
         return 0
 
