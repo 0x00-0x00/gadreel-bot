@@ -50,7 +50,7 @@ class MemberRegexHandler(object):
         Tries to identify the message using one regular expression.
         """
         regex = "^(acc?|accept?|aceitar)\s+(?P<id>[\d]+)"
-        m = re..match(regex, self.message.decode())
+        m = re.match(regex, self.message.decode())
         if not m:
             return None
         return m.groupdict()
