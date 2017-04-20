@@ -73,7 +73,7 @@ class RequestMember(object):
             db.controller.execute(t4.insert_data([self.id, "PENDING", str(time())]))
             db.save()
         except Exception as e:
-
+            logger.error("Could not create new member.")
         return 0
 
 
