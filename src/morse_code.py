@@ -29,7 +29,7 @@ def morse_encode(text):
 def morse_decode(code):
     out = str()
     signs = code.split(" ")
-    for element in signs[:-1]:
+    for element in signs:
         out += CODE_REVERSED[element]
     return out
 
@@ -50,7 +50,5 @@ def morse_decode_regex(text):
         return None
     else:
         last = text.replace("/morsed ", "")
-        print(last)
         output = last.replace('"', "")
-        print(output)
         return output
