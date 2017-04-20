@@ -172,7 +172,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         """
         Function handler for managing tasks
         """
-        if types(text) is bytes:
+        if type(text) is bytes:
             text = remove_accents(text.decode())
         else:
             text = remove_accents(text)
