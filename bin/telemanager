@@ -137,6 +137,10 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         """
         Base64 converter new feature.
         """
+
+        if type(text) is bytes:
+            text = text.decode()  # Avoid printing 'b' with the string
+        
         base64d_r = b64decode_regex(text)
         base64e_r = b64encode_regex(text)
 
