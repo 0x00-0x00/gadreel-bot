@@ -16,7 +16,7 @@ from telemanager.database import *
 from telemanager.io import *
 from telemanager.talk import *
 from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task, present_tasks
-from telemanager.authentication import AuthenticationCheck
+from telemanager.authentication import AuthenticationCheck, MemberRegexHandler
 from telemanager.b64decoder import b64decode_regex, b64encode_regex, b64d, b64e
 
 
@@ -164,6 +164,10 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         return 0
 
+    async def _authHandler(self, text):
+        MemberRegexHandler(text)
+        return 0
+
     async def _tasks(self, username, chat_id, text):
         """
         Function handler for managing tasks
@@ -259,6 +263,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._message_search(text)
             await self._tasks(username, chat_id, text)
             await self._base64converter(original_text)
+            await self._authHandler(original_text)
 
             #  Log the messages
             self._log_message(username, text)
