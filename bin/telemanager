@@ -236,6 +236,15 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         content_type, chat_type, chat_id = telepot.glance(message)
         user_id = message["from"]["id"]
         first_name, last_name, username = self._recvd_from(message)
+
+        # Telegram ID identifier 
+        data_received = message["text"]
+        if type(data_received) is bytes:
+            data_received = data_received.decode()
+        if data_received == "/id":
+            await self.sender.sendMessage("Telegram ID: {0}".format(user_id))
+
+
         auth = AuthenticationCheck(user_id).check()
         if auth == -1:
             log.debug("User #{0} - {1} is not authorized to use my functions.".format(user_id, username))
@@ -261,11 +270,6 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             #  Logging for debugging purposes.
             #log.debug("Message FROM object: {0}".format(message["from"]))
             #log.debug("Received message: {0}".format(text))
-
-            if type(original_text) is bytes:
-                original_text = original_text.decode()
-            if original_text == "/id":
-                await self.sender.sendMessage("Telegram ID: {0}".format(user_id))
 
             #  Search algorithms
             await self._message_search(text)
