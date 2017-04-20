@@ -1,3 +1,5 @@
+import re
+
 CODE = {'A': '.-',     'B': '-...',   'C': '-.-.',
         'D': '-..',    'E': '.',      'F': '..-.',
         'G': '--.',    'H': '....',   'I': '..',
@@ -41,7 +43,7 @@ class MorseHandler(object):
         self.sender = sender
         self._parse_regex()
 
-    def _parse_regex(self):
+    async def _parse_regex(self):
         decoded = self._decode()
         encoded = self._encoded()
         if not decoded and not encoded:
