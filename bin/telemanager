@@ -191,10 +191,6 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         MemberRegexHandler(text)
         return 0
 
-    async def _morseHandler(self, text):
-        MorseHandler(text, self.sender)
-        return 0
-
     async def _tasks(self, username, chat_id, text):
         """
         Function handler for managing tasks
