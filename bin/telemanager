@@ -17,6 +17,7 @@ from telemanager.io import *
 from telemanager.talk import *
 from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task, present_tasks
 from telemanager.authentication import AuthenticationCheck
+from telemanager.b64decoder import b64decode_regex, b64encode_regex, b64d, b64e
 
 
 #  Create the logger object
@@ -132,6 +133,33 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 await self.sender.sendDocument(file_id)
         return 0
 
+    async def _base64converter(self, text):
+        """
+        Base64 converter new feature.
+        """
+        base64d_r = b64decode_regex(text)
+        base64e_r = b64encode_regex(text)
+
+        if not base64e_r and not base64d_r:
+            return -1
+
+        if base64d_r:
+            decoded_text = b64d(text)
+            log.debug("Base64 decode function activated.")
+            log.debug("To decode text: {0}".format(text))
+            log.debug("Decoded text: {0}".format(decoded_text))
+            self.sender.sendMessage(decoded_text))
+            return 0
+
+        if base64e_r:
+            encoded_text = b64e(text)
+            log.debug("Base64 encode function activated.")
+            log.debug("To encode text: {0}".format(text))
+            log.debug("Encoded text: {0}".format(encoded_text))
+            self.sender.sendMessage(encoded_text))
+
+        return 0
+
     async def _tasks(self, username, chat_id, text):
         """
         Function handler for managing tasks
@@ -225,6 +253,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             #  Search algorithms
             await self._message_search(text)
             await self._tasks(username, chat_id, text)
+            await self._base64converter(text)
 
             #  Log the messages
             self._log_message(username, text)
