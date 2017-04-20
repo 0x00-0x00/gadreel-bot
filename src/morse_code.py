@@ -48,4 +48,4 @@ def morse_decode_regex(text):
     if not m:
         return None
     else:
-        return text.split(" ")[:-1].replace('"', "")
+        return text.split(" ")[:-1][0].replace('"', "")
