@@ -19,7 +19,6 @@ class MemberRegexHandler(object):
 
         #  Returns if no match.
         if not acc and not req:
-            logger.debug("No Member Registration or Accept Regex Match.")
             return 0
 
         if req:
