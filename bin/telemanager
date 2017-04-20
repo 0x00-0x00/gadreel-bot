@@ -172,7 +172,10 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         """
         Function handler for managing tasks
         """
-        text = remove_accents(text)
+        if types(text) is bytes:
+            text = remove_accents(text.decode())
+        else:
+            text = remove_accents(text)
         task_r = new_task_regex(text)
         task_l = list_task_regex(text)
         task_d = delete_task_regex(text)
