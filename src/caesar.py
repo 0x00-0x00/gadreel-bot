@@ -23,7 +23,9 @@ class CaesarCipher(object):
     def shift(self, shift_num):
         out = str()
         for char in self.data:
+            print(char)
             index = LETTERS.index(char)
+            print(index)
             index += shift_num
             out += LETTERS[index % MAX_SHIFT: (index % MAX_SHIFT)+1]
         return out
