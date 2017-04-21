@@ -176,7 +176,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         if caesar_r:
             fmt = str()
-            caesar_obj = CaesarCipher(text)
+            caesar_obj = CaesarCipher(caesar_r)
             for i in range(0, 26):
                 fmt += "{0} -> {1}\n".format(caesar_obj.shift(i), i)
             await self.sender.sendMessage(fmt)
