@@ -46,7 +46,6 @@ class AsciiConverter(object):
         Returns: String, List
         """
         out = str()
-        print("DATA: {0}".format(self.data))
         for element in self.data:
             if element == "" or element == " ":
                 continue
