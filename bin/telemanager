@@ -19,6 +19,7 @@ from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex
 from telemanager.authentication import AuthenticationCheck, MemberRegexHandler
 from telemanager.b64decoder import b64decode_regex, b64encode_regex, b64d, b64e
 from telemanager.morse_code import morse_encode_regex, morse_decode_regex, morse_encode, morse_decode
+from telemanager.ascii_converter import AsciiConverter, ascii_to_text_regex, text_to_ascii_regex
 
 #  Create the logger object
 log = Logger("TeleManager")
@@ -153,8 +154,33 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         if morse_d:
             to_decode = morse_d
+            print(to_decode)
             decoded_text = morse_decode(to_decode)
             await self.sender.sendMessage(decoded_text)
+
+        return 0
+
+    async def _asciiconverter(self, text):
+        """
+        Ascii Converter Feature
+        """
+        if type(text) is bytes:
+            text = text.decode()
+
+        ascii_to_text_r = ascii_to_text_regex(text)
+        text_to_ascii_r = text_to_ascii_regex(text)
+
+        if not ascii_to_text_r and not text_to_ascii_r:
+            return -1
+
+        if ascii_to_text_r:
+            ascii_obj = AsciiConverter(ascii_to_text_r, 0)
+
+        if text_to_ascii_r:
+            ascii_obj = AsciiConverter(text_to_ascii_r, 1)
+
+        if ascii_obj:
+            await self.sender.sendMessage(ascii_obj.converted)
 
         return 0
 
