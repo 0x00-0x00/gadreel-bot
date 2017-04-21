@@ -20,6 +20,7 @@ from telemanager.authentication import AuthenticationCheck, MemberRegexHandler
 from telemanager.b64decoder import b64decode_regex, b64encode_regex, b64d, b64e
 from telemanager.morse_code import morse_encode_regex, morse_decode_regex, morse_encode, morse_decode
 from telemanager.ascii_converter import AsciiConverter, ascii_to_text_regex, text_to_ascii_regex
+from telemanager.caesar import CaesarCipher, caesar_cipher_regex
 
 #  Create the logger object
 log = Logger("TeleManager")
