@@ -328,6 +328,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._base64converter(original_text)
             await self._authHandler(original_text)
             await self._morseHandler(original_text)
+            await self._asciiconverter(original_text)
 
 
             #  Log the messages
