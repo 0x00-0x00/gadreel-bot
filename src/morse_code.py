@@ -48,9 +48,9 @@ def morse_decode_regex(text):
     if not m:
         return None
     else:
-        # Maybe fixes the bug
+        # fixes the always match bug
         if "/morsed" not in text:
-            return -1
+            return None
         last = text.replace("/morsed ", "")
         output = last.replace('"', "")
         return output
