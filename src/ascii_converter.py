@@ -6,7 +6,7 @@ def ascii_to_text_regex(message):
     regex = "^\/asciid\s+(?P<data>[0-9\s]+)"
     m = re.match(regex, message)
     if not m:
-        return -1
+        return None
     else:
         return m.groupdict()["data"]
 
@@ -15,7 +15,7 @@ def text_to_ascii_regex(message):
     regex = "^\/asciie\s+(?P<data>[a-zA-Z\s]+)"
     m = re.match(regex, message)
     if not m:
-        return -1
+        return None
     else:
         return m.groupdict()["data"]
 

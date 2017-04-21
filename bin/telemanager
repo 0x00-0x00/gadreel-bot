@@ -174,9 +174,11 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             return -1
 
         if ascii_to_text_r:
+            print("ASCII to Text: {0}".format(ascii_to_text_r))
             ascii_obj = AsciiConverter(ascii_to_text_r, 0)
 
         if text_to_ascii_r:
+            print("TEXT to ASCII: {0}".format(text_to_ascii_r))
             ascii_obj = AsciiConverter(text_to_ascii_r, 1)
 
         if ascii_obj:
