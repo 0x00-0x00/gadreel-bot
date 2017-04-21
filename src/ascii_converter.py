@@ -61,4 +61,4 @@ class AsciiConverter(object):
         out = list()
         for char in self.data:
             out.append(ord(char))
-        return (out)
+        return ' '.join([str(x) for x in out])
