@@ -160,6 +160,27 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         return 0
 
+    async def _caesarshift(self, text):
+        """
+        Caesar Cipher Feature
+        """
+
+        if type(text) is bytes:
+            text = text.decode()
+
+        caesar_r = caesar_cipher_regex(text)
+
+        if not caesar_r:
+            return -1
+
+        if caesar_r:
+            fmt = str()
+            caesar_obj = CaesarCipher(text)
+            for i in range(0, 26):
+                fmt += "{0} -> {1}\n".format(caesar_obj.shift(i), i)
+            await self.sender.sendMessage(fmt)
+        return 0
+
     async def _asciiconverter(self, text):
         """
         Ascii Converter Feature
@@ -329,7 +350,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._authHandler(original_text)
             await self._morseHandler(original_text)
             await self._asciiconverter(original_text)
-
+            await self._caesarshift(original_text)
 
             #  Log the messages
             self._log_message(username, text)

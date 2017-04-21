@@ -2,6 +2,16 @@
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 MAX_SHIFT = len(LETTERS)
 
+
+def caesar_cipher_regex(message):
+    regex = "^\/caesar\s+(?P<data>[a-zA-Z]+)"
+    m = re.match(regex, message)
+    if not m:
+        return None
+    else:
+        return m.groupdict()["data"]
+
+
 class CaesarCipher(object):
     def __init__(self, data):
         if type(data) is bytes:
