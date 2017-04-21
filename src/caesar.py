@@ -6,7 +6,15 @@ MAX_SHIFT = len(LETTERS)
 
 
 def caesar_cipher_regex(message):
-    regex = "^\/caesar\s+(?P<data>[a-zA-Z]+)"
+    regex = "^\/caesare\s+(?P<data>[a-zA-Z]+)"
+    m = re.match(regex, message)
+    if not m:
+        return None
+    else:
+        return m.groupdict()["data"]
+
+def caesar_cipher_decipher_regex(message):
+    regex = "^\/caesard\s+(?P<data>[a-zA-Z]+)"
     m = re.match(regex, message)
     if not m:
         return None

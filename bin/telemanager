@@ -20,7 +20,8 @@ from telemanager.authentication import AuthenticationCheck, MemberRegexHandler
 from telemanager.b64decoder import b64decode_regex, b64encode_regex, b64d, b64e
 from telemanager.morse_code import morse_encode_regex, morse_decode_regex, morse_encode, morse_decode
 from telemanager.ascii_converter import AsciiConverter, ascii_to_text_regex, text_to_ascii_regex
-from telemanager.caesar import CaesarCipher, caesar_cipher_regex
+from telemanager.caesar import CaesarCipher, caesar_cipher_regex, caesar_cipher_decipher_regex
+from telemenager.frequency_analysis import *
 
 #  Create the logger object
 log = Logger("TeleManager")
@@ -170,16 +171,31 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             text = text.decode()
 
         caesar_r = caesar_cipher_regex(text)
+        caesard_r = caesar_cipher_decipher_regex(text)
 
-        if not caesar_r:
+        if not caesar_r and not caesard_r:
             return -1
 
         if caesar_r:
             fmt = str()
             caesar_obj = CaesarCipher(caesar_r)
             for i in range(0, 26):
-                fmt += "{0} -> {1}\n".format(caesar_obj.shift(i), i)
+                fmt += "{0} -> {1}\n".format(i, caesar_obj.shift(i))
             await self.sender.sendMessage(fmt)
+
+        if caesard_r:
+            ciphers = list()
+            caesar_obj = CaesarCipher(caesard_r)
+            for i in range(0, 26):
+                ciphers.append(caesar_obj.shift(i))
+
+            delta_freq = {}
+            for cipher in ciphers:
+                f = Frequency(PORTUGUESE_FREQ, cipher)
+                delta_freq[f.distance] = f.cipher
+            chosen = min(delta_freq.keys())
+            await self.sender.sendMessage(chosen)
+
         return 0
 
     async def _asciiconverter(self, text):
