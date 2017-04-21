@@ -35,7 +35,6 @@ class AsciiConverter(object):
         self.data = data
         if mode == 0:
             self.data = self.data.split(" ")
-            self.data = list(filter(lambda x: not "", self.data))
             self.converted = self._convert_to_text()
         elif mode == 1:
             self.converted = self._convert_to_number()
