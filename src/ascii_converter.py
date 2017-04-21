@@ -48,8 +48,8 @@ class AsciiConverter(object):
         """
         out = str()
         for element in self.data:
-            if element == "":
-                continues
+            if element == "" or element == " ":
+                continue
             out += chr(int(element))
         return (out)
 
