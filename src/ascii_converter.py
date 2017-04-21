@@ -34,8 +34,8 @@ class AsciiConverter(object):
             data = data.decode()
         self.data = data
         if mode == 0:
-            print(self.data)
-            self.data = list(filter(lambda x: not "", [x for x in self.data]))
+            self.data = self.data.split(" ")
+            self.data = list(filter(lambda x: not "", self.data))
             self.converted = self._convert_to_text()
         elif mode == 1:
             self.converted = self._convert_to_number()
