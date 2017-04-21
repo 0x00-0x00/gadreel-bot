@@ -194,7 +194,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 f = Frequency(PORTUGUESE_FREQ, cipher)
                 delta_freq[f.distance] = f.cipher
             chosen = min(delta_freq.keys())
-            await self.sender.sendMessage(chosen)
+            await self.sender.sendMessage(delta_freq[chosen])
 
         return 0
 
