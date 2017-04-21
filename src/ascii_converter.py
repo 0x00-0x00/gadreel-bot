@@ -8,7 +8,6 @@ def ascii_to_text_regex(message):
     if not m:
         return -1
     else:
-        print(m.groupdict()["data"])
         return m.groupdict()["data"]
 
 
@@ -18,7 +17,6 @@ def text_to_ascii_regex(message):
     if not m:
         return -1
     else:
-        print(m.groupdict()["data"])
         return m.groupdict()["data"]
 
 
@@ -36,6 +34,7 @@ class AsciiConverter(object):
             data = data.decode()
         self.data = data
         if mode == 0:
+            print(self.data)
             self.data = list(filter(lambda x: not "", [x for x in self.data]))
             self.converted = self._convert_to_text()
         elif mode == 1:
