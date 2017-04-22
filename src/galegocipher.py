@@ -23,7 +23,7 @@ def galegoe_regex(message):
 def galegod_regex(message):
     if type(message) is bytes:
         message = message.decode()
-    regex = "^\/galegod\s+(?P<data>[a-zA-Z0-9\s]+)"
+    regex = "^\/galegod\s+(?P<data>[a-zA-Z0-9@!_|\s]+)"
     m = re.match(regex, message)
     if not m:
         return None
