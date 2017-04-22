@@ -216,7 +216,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         """
         if type(text) is bytes:
             text = text.decode()
-            
+
         galegoe_r = galegoe_regex(text)
         galegod_r = galegod_regex(text)
 
@@ -470,6 +470,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._vignereCipher(original_text)
             await self._duckduck(original_text)
             await self._helpme(original_text)
+            await self._galegoCipher(original_text)
 
             #  Log the messages
             self._log_message(username, text)
