@@ -23,6 +23,7 @@ from telemanager.ascii_converter import AsciiConverter, ascii_to_text_regex, tex
 from telemanager.caesar import CaesarCipher, caesar_cipher_regex, caesar_cipher_decipher_regex
 from telemanager.vignere import vigneree_regex, vignered_regex, VignereCipher
 from telemanager.frequency_analysis import *
+from telemanager.duckduckgo import duckduck_regex, ddg
 
 #  Create the logger object
 log = Logger("TeleManager")
@@ -300,6 +301,21 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         MemberRegexHandler(text)
         return 0
 
+    async def _duckduck(self, text):
+        """
+        Duck Duck Go Search
+        """
+        if type(text) is bytes:
+            text = text.decode()
+
+        duck_regex = duckduck_regex(text)
+        if not duck_regx:
+            return -1
+
+        if duck_regex:
+            await self.sender.sendMessage(ddg(duck_regex))
+        return 0
+
     async def _tasks(self, username, chat_id, text):
         """
         Function handler for managing tasks
@@ -414,7 +430,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._asciiconverter(original_text)
             await self._caesarshift(original_text)
             await self._vignereCipher(original_text)
-
+            await self._duckduck(original_text)
 
             #  Log the messages
             self._log_message(username, text)
