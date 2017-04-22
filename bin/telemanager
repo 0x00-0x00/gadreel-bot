@@ -21,6 +21,7 @@ from telemanager.b64decoder import b64decode_regex, b64encode_regex, b64d, b64e
 from telemanager.morse_code import morse_encode_regex, morse_decode_regex, morse_encode, morse_decode
 from telemanager.ascii_converter import AsciiConverter, ascii_to_text_regex, text_to_ascii_regex
 from telemanager.caesar import CaesarCipher, caesar_cipher_regex, caesar_cipher_decipher_regex
+from telemanager.vignere import vigneree_regex, vignered_regex, VignereCipher
 from telemanager.frequency_analysis import *
 
 #  Create the logger object
@@ -161,6 +162,49 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         return 0
 
+    async def _vigenereCipher(self, text):
+        """
+        Vigenere Cipher En/Decryptor
+        """
+        if type(text) is bytes:
+            text = text.decode()
+
+        vige_r = vigneree_regex(text)
+        vigd_r = vignered_regex(text)
+
+        if not vige_r and not vigd_r:
+            return -1
+
+        if vige_r:
+            data = vige_r["data"]
+            key = vige_r["key"]
+            if key is None:
+                await self.sender.sendMessage("A cifra de vignere requer uma senha/chave.")
+                return 0
+
+            if data is None:
+                await self.sender.sendMessage("A cifra de vignere requer uma mensagem.")
+                return 0
+
+            v = VigenereCipher(data, key)
+            await self.sender.sendMessage(v._encrypt())
+
+        if vigd_r:
+            data = vigd_r["data"]
+            key = vigd_r["key"]
+            if key is None:
+                await self.sender.sendMessage("A cifra de vignere requer uma senha/chave.")
+                return 0
+
+            if data is None:
+                await self.sender.sendMessage("A cifra de vignere requer uma mensagem.")
+                return 0
+
+            v = VigenereCipher(data, key)
+            await self.sender.sendMessage(v._decrypt())
+
+        return 0
+
     async def _caesarshift(self, text):
         """
         Caesar Cipher Feature
@@ -255,7 +299,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
     async def _authHandler(self, text):
         MemberRegexHandler(text)
         return 0
-      
+
     async def _tasks(self, username, chat_id, text):
         """
         Function handler for managing tasks

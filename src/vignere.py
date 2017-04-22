@@ -1,5 +1,24 @@
+import re
+
 LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 MAX_SHIFT = len(LETTERS)
+
+def vigneree_regex(message):
+    regex = "^\/vigneree\s+(?P<data>[a-zA-Z\s]+)\s?|`(?P<key>[a-zA-Z]+)`$"
+    m = re.match(regex, match)
+    if not m:
+        return None
+    else:
+        return m.groupdict()
+
+def vignered_regex(message):
+    regex = "^\/vignered\s+(?P<data>[a-zA-Z\s]+)\s?|`(?P<key>[a-zA-Z]+)`$"
+    m = re.match(regex, match)
+    if not m:
+        return None
+    else:
+        return m.groupdict()
+
 
 class VignereCipher(object):
     def __init__(self, message, key):
