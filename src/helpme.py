@@ -11,8 +11,8 @@ def help_regex(message):
     return 0
 
 HELP_MARKDOWN = """*Para procurar/baixar material ou mensagens*:
-procurar "PALAVRA-CHAVE"
-procurar "ARQUIVO_PARA_BAIXAR.PDF"
+/procurar "PALAVRA-CHAVE"
+/procurar "ARQUIVO_PARA_BAIXAR.PDF"
 
 *Para pesquisar na internet*:
 /duckduck PESQUISA
