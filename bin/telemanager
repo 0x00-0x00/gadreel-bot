@@ -176,6 +176,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             return -1
 
         if vige_r:
+            print(vige_r)
             data = vige_r["data"]
             key = vige_r["key"]
             if key is None:
