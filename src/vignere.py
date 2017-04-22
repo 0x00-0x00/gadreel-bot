@@ -4,7 +4,7 @@ LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 MAX_SHIFT = len(LETTERS)
 
 def vigneree_regex(message):
-    regex = "^\/vigneree\s+(?P<data>[a-zA-Z\s]+)\s?|`(?P<key>[a-zA-Z]+)`$"
+    regex = '^\/vigneree\s+(?P<data>[a-zA-Z\s]+)"?|(?P<key>[a-zA-Z]+)"?|$'
     m = re.match(regex, message)
     if not m:
         return None
@@ -12,7 +12,7 @@ def vigneree_regex(message):
         return m.groupdict()
 
 def vignered_regex(message):
-    regex = "^\/vignered\s+(?P<data>[a-zA-Z\s]+)\s?|`(?P<key>[a-zA-Z]+)`$"
+    regex = '^\/vignered\s+(?P<data>[a-zA-Z\s]+)"?|(?P<key>[a-zA-Z]+)"?|$'
     m = re.match(regex, message)
     if not m:
         return None
