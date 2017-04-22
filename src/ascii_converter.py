@@ -12,7 +12,7 @@ def ascii_to_text_regex(message):
 
 
 def text_to_ascii_regex(message):
-    regex = "^\/asciie\s+(?P<data>[a-zA-Z\s]+)"
+    regex = "^\/asciie\s+(?P<data>[a-zA-Z0-9@!_|\s]+)"
     m = re.match(regex, message)
     if not m:
         return None
