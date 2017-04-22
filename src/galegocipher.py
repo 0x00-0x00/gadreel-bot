@@ -7,7 +7,7 @@ import re
 SUBST = {
         "7":"L", "p":"D", "d":"P", "@":"A",
         "W":"M", "3":"E", "0":"O", "!":"I",
-        "_|_":"T", "n": "U",
+        "_|_":"T", "n": "U", "M":"W",
         }
 
 def galegoe_regex(message):
