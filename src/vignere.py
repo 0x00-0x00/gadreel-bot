@@ -38,6 +38,7 @@ class VignereCipher(object):
         """
         Method to expand the key to the message length
         """
+        n = 1
         if self.msg_length > self.key_length:
             n = self.msg_length / self.key_length + 1
         expanded_key = self.key * int(n)
