@@ -450,9 +450,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         else:
             # Send unknown type message
-            log.debug("Tipo de entrada de dados \
-
-                    desconhecida! \nContent-Type: {0}".format(content_type))
+            log.debug("Tipo de entrada de dados desconhecida! \nContent-Type: {0}".format(content_type))
 
     async def _parse_message_results(self, results, n=5):
         """
