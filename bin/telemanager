@@ -162,7 +162,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         return 0
 
-    async def _vigenereCipher(self, text):
+    async def _vignereCipher(self, text):
         """
         Vigenere Cipher En/Decryptor
         """
@@ -176,7 +176,6 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             return -1
 
         if vige_r:
-            print(vige_r)
             data = vige_r["data"]
             key = vige_r["key"]
             if key is None:
@@ -187,7 +186,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 await self.sender.sendMessage("A cifra de vignere requer uma mensagem.")
                 return 0
 
-            v = VigenereCipher(data, key)
+            v = VignereCipher(data, key)
             await self.sender.sendMessage(v._encrypt())
 
         if vigd_r:
@@ -201,7 +200,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 await self.sender.sendMessage("A cifra de vignere requer uma mensagem.")
                 return 0
 
-            v = VigenereCipher(data, key)
+            v = VignereCipher(data, key)
             await self.sender.sendMessage(v._decrypt())
 
         return 0
@@ -414,7 +413,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._morseHandler(original_text)
             await self._asciiconverter(original_text)
             await self._caesarshift(original_text)
-            await self._vigenereCipher(original_text)
+            await self._vignereCipher(original_text)
 
 
             #  Log the messages
