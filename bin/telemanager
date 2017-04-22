@@ -24,6 +24,7 @@ from telemanager.caesar import CaesarCipher, caesar_cipher_regex, caesar_cipher_
 from telemanager.vignere import vigneree_regex, vignered_regex, VignereCipher
 from telemanager.frequency_analysis import *
 from telemanager.duckduckgo import duckduck_regex, ddg
+from telemanager.helpme import help_regex, HELP_MARKDOWN
 
 #  Create the logger object
 log = Logger("TeleManager")
@@ -299,6 +300,20 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
     async def _authHandler(self, text):
         MemberRegexHandler(text)
+        return 0
+
+    async def _helpme(self, text):
+        """
+        Help me message
+        """
+        if type(text) is bytes:
+            text = text.decode()
+
+        help_regex = help_regex(text)
+        if not help_regex:
+            return -1
+
+        await self.sender.sendMessage(HELP_MARKDOWN, parse_mode="Markdown")
         return 0
 
     async def _duckduck(self, text):
