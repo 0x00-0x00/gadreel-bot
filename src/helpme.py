@@ -35,6 +35,10 @@ Ascii En/Decoder:
 /asciie TEXTO
 /asciid NN NN NN NN
 
+Galego Cipher En/Decoder:
+/galegoe TEXTO
+/galegod CIPHER
+
 Caesar Cipher En/Decryptor:
 /caesare PLAINTEXT
 /caesard CIPHER
