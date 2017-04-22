@@ -12,8 +12,15 @@ logger = Logger("Tasks")
 
 
 def remove_accents(input_str):
+    """
+    Receive a input_str (bytes or String) and returns a no-accent String
+    """
+    if type(input_str) is bytes:
+        input_str = input_str.decode()
     nfkd_form = unicodedata.normalize('NFKD', input_str)
     only_ascii = nfkd_form.encode('ASCII', 'ignore')
+    if type(only_ascii) is bytes:
+        only_ascii = only_ascii.decode()
     return only_ascii
 
 
@@ -30,8 +37,10 @@ def new_task_regex(message):
     """
     Regex to match the task creation request
     """
-    regex = "^(criar?|nova?|new?|registrar?|register)\s(tarefa?|task)\s(\"?|')(?P<task>[a-zA-Z0-9\s\/:\.\-ç]+)(\"?|')"
-    m = re.match(regex, remove_accents(message).decode())
+    if type(message) is bytes:
+        message = message.decode()
+    regex = "^(criar?|nova?|new?|add)\s(tarefa?|task)\s(\"?|')(?P<task>[a-zA-Z0-9\s\/:\.\-ç]+)(\"?|')"
+    m = re.match(regex, remove_accents(message))
     if not m:
         return None
     else:
@@ -41,6 +50,8 @@ def list_task_regex(message):
     """
     Regex to match the task creation request
     """
+    if type(message) is bytes:
+        message = message.decode()
     regex = "^(listar?|list)\s(tarefa?(s)?|task?|tasks)"
     m = re.match(regex, message)
     if not m:
@@ -52,6 +63,8 @@ def delete_task_regex(message):
     """
     Regex to match the task creation request
     """
+    if type(message) is bytes:
+        message = message.decode()
     regex = "^(deletar?|delete?|del?|concluir?|finish)\s+(task(s)?|tarefa?|tarefas)\s+('?|\")(?P<task_id>[0-9A-Za-z]+)('?|\")"
     m = re.match(regex, message)
     if not m:

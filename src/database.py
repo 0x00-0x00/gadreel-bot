@@ -27,3 +27,11 @@ t3 = Table("TASKS", {
     6: ('TIMESTAMP', TEXT),
 })
 db.controller.execute(t3.create())
+
+t4 = Table("MEMBERS", {
+    1: ('USER_ID', TEXT),
+    2: ('STATUS', TEXT),
+    3: ('TIMESTAMP', TEXT)
+})
+db.controller.execute(t4.create())
+db.save()

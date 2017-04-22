@@ -15,8 +15,13 @@ from telepot.aio.delegate import pave_event_space, per_chat_id, create_open
 from telemanager.database import *
 from telemanager.io import *
 from telemanager.talk import *
-from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task, present_tasks
-
+from telemanager.tasks import new_task_regex, delete_task_regex, list_task_regex, list_all_tasks, delete_a_task, create_new_task, present_tasks, remove_accents
+from telemanager.authentication import AuthenticationCheck, MemberRegexHandler
+from telemanager.b64decoder import b64decode_regex, b64encode_regex, b64d, b64e
+from telemanager.morse_code import morse_encode_regex, morse_decode_regex, morse_encode, morse_decode
+from telemanager.ascii_converter import AsciiConverter, ascii_to_text_regex, text_to_ascii_regex
+from telemanager.caesar import CaesarCipher, caesar_cipher_regex, caesar_cipher_decipher_regex
+from telemanager.frequency_analysis import *
 
 #  Create the logger object
 log = Logger("TeleManager")
@@ -34,7 +39,7 @@ else:
 
 
 def search_pattern(txt):
-    pattern = "(^procurar?|^buscar?|^search?|^pesquisar)\s+(?P<file>[\w\.]+)"
+    pattern = "(^\/procurar?|^\/buscar?|^\/search?|^\/pesquisar)\s+(?P<file>[\w\.]+)"
     m = re.match(pattern, txt)
     if not m:
         return None
@@ -64,9 +69,13 @@ def search_file(match):
 
 
 def search_messages(match):
+    """
+    Search messages function handler
+    """
     keyword = match["file"]
     db.controller.execute(t1.search("MESSAGE", keyword))
     results = db.controller.get()
+    log.debug("Query returned {0} results.".format(len(results)))
     return results
 
 
@@ -126,10 +135,136 @@ class BotHandler(telepot.aio.helper.ChatHandler):
                 await self.sender.sendDocument(file_id)
         return 0
 
+    async def _morseHandler(self, text):
+        """
+        Morse code converder new feature.
+        """
+        if type(text) is bytes:
+            text = text.decode()
+
+        morse_e = morse_encode_regex(text)
+        morse_d = morse_decode_regex(text)
+
+        if not morse_e and not morse_d:
+            return -1
+
+        if morse_e:
+            to_encode = morse_e["data"]
+            encoded_text = morse_encode(to_encode)
+            await self.sender.sendMessage(encoded_text)
+
+        if morse_d:
+            to_decode = morse_d
+            print(to_decode)
+            decoded_text = morse_decode(to_decode)
+            await self.sender.sendMessage(decoded_text)
+
+        return 0
+
+    async def _caesarshift(self, text):
+        """
+        Caesar Cipher Feature
+        """
+
+        if type(text) is bytes:
+            text = text.decode()
+
+        caesar_r = caesar_cipher_regex(text)
+        caesard_r = caesar_cipher_decipher_regex(text)
+
+        if not caesar_r and not caesard_r:
+            return -1
+
+        if caesar_r:
+            fmt = str()
+            caesar_obj = CaesarCipher(caesar_r)
+            for i in range(0, 26):
+                fmt += "{0} -> {1}\n".format(i, caesar_obj.shift(i))
+            await self.sender.sendMessage(fmt)
+
+        if caesard_r:
+            ciphers = list()
+            caesar_obj = CaesarCipher(caesard_r)
+            for i in range(0, 26):
+                ciphers.append(caesar_obj.shift(i))
+
+            delta_freq = {}
+            for cipher in ciphers:
+                f = Frequency(PORTUGUESE_FREQ, cipher)
+                delta_freq[f.distance] = f.cipher
+            chosen = min(delta_freq.keys())
+            await self.sender.sendMessage(delta_freq[chosen])
+
+        return 0
+
+    async def _asciiconverter(self, text):
+        """
+        Ascii Converter Feature
+        """
+        if type(text) is bytes:
+            text = text.decode()
+
+        ascii_to_text_r = ascii_to_text_regex(text)
+        text_to_ascii_r = text_to_ascii_regex(text)
+
+        if not ascii_to_text_r and not text_to_ascii_r:
+            return -1
+
+        if ascii_to_text_r:
+            ascii_obj = AsciiConverter(ascii_to_text_r, 0)
+
+        if text_to_ascii_r:
+            ascii_obj = AsciiConverter(text_to_ascii_r, 1)
+
+        if ascii_obj:
+            await self.sender.sendMessage(ascii_obj.converted)
+
+        return 0
+
+    async def _base64converter(self, text):
+        """
+        Base64 converter new feature.
+        """
+
+        if type(text) is bytes:
+            text = text.decode()  # Avoid printing 'b' with the string
+
+        base64d_r = b64decode_regex(text)
+        base64e_r = b64encode_regex(text)
+
+        if not base64e_r and not base64d_r:
+            return -1
+
+        if base64d_r:
+            decoded_text = b64d(text)
+            #log.debug("Base64 decode function activated.")
+            #log.debug("To decode text: {0}".format(text))
+            #log.debug("Decoded text: {0}".format(decoded_text))
+            await self.sender.sendMessage(decoded_text)
+            return 0
+
+        if base64e_r:
+            encoded_text = b64e(text)
+            #log.debug("Base64 encode function activated.")
+            #log.debug("To encode text: {0}".format(text))
+            #log.debug("Encoded text: {0}".format(encoded_text))
+            await self.sender.sendMessage(encoded_text)
+
+        return 0
+
+    async def _authHandler(self, text):
+        MemberRegexHandler(text)
+        return 0
+      
     async def _tasks(self, username, chat_id, text):
         """
         Function handler for managing tasks
         """
+        if type(text) is bytes:
+            text = remove_accents(text.decode())
+        else:
+            text = remove_accents(text)
+
         task_r = new_task_regex(text)
         task_l = list_task_regex(text)
         task_d = delete_task_regex(text)
@@ -171,16 +306,39 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         return -1
 
     def _log_message(self, text, username):
-        insert_data = t1.insert_data([username, text, str(time.time())])
+
+        """
+        Log the message received into the database.
+        """
+        #insert_data = t1.insert_data([username, text, str(time.time())])
+        insert_data = t1.insert_data([text, username, str(time.time())])
         db.controller.execute(insert_data)
         db.save()  # Store conversation data
+        log.debug("Message save to database.\n")
         return 0
 
 
     async def on_chat_message(self, message):
+        """
+        Bot Message Handler
+        """
         self._count += 1
         content_type, chat_type, chat_id = telepot.glance(message)
+        user_id = message["from"]["id"]
         first_name, last_name, username = self._recvd_from(message)
+
+        # Telegram ID identifier
+        data_received = message["text"]
+        if type(data_received) is bytes:
+            data_received = data_received.decode()
+        if data_received == "/id":
+            await self.sender.sendMessage("Telegram ID: {0}".format(user_id))
+
+
+        auth = AuthenticationCheck(user_id).check()
+        if auth == -1:
+            log.debug("User #{0} - {1} is not authorized to use my functions.".format(user_id, username))
+            return -1
 
         #  Code flow based on content_type
         #  Photos (.jpg, .png)
@@ -190,23 +348,28 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             db.controller.execute(insert_data)
             db.save()
 
-            #  Avoiding too much verbose
-            #await self.sender.sendMessage("Baixando imagem '{0}' ...".format(photo_id))
-
             if not os.path.exists(cache_dir + os.sep + photo_id):
                 await self.bot.download_file(photo_id, cache_dir + os.sep + photo_id + ".jpg")
                 await self.sender.sendMessage(random.choice(image_download).format(photo_id), parse_mode="Markdown")
 
         #  Text data
         elif content_type == "text":
+            original_text = message["text"]
             text = str(message["text"].lower()).replace("'",'"')
 
             #  Logging for debugging purposes.
-            log.debug("Received message: {0}".format(text))
+            #log.debug("Message FROM object: {0}".format(message["from"]))
+            #log.debug("Received message: {0}".format(text))
 
             #  Search algorithms
             await self._message_search(text)
             await self._tasks(username, chat_id, text)
+            await self._base64converter(original_text)
+            await self._authHandler(original_text)
+            await self._morseHandler(original_text)
+            await self._asciiconverter(original_text)
+            await self._caesarshift(original_text)
+
 
             #  Log the messages
             self._log_message(username, text)
@@ -243,7 +406,8 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         else:
             # Send unknown type message
-            logger.debug("Tipo de entrada de dados \
+            log.debug("Tipo de entrada de dados \
+
                     desconhecida! \nContent-Type: {0}".format(content_type))
 
     async def _parse_message_results(self, results, n=5):
