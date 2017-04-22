@@ -25,6 +25,9 @@ from telemanager.vignere import vigneree_regex, vignered_regex, VignereCipher
 from telemanager.frequency_analysis import *
 from telemanager.duckduckgo import duckduck_regex, ddg
 from telemanager.helpme import help_regex, HELP_MARKDOWN
+from telemanager.galegocipher import galegoe_regex, galegod_regex
+from telemanager.galegocipher import encryption as galego_encrypt
+from telemanager.galegocipher import decryption as galego_decrypt
 
 #  Create the logger object
 log = Logger("TeleManager")
@@ -205,6 +208,26 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             v = VignereCipher(data, key)
             await self.sender.sendMessage(v._decrypt())
 
+        return 0
+
+    async def _galegoCipher(self, text):
+        """
+        Galego Cipher Feature
+        """
+        if type(text) is bytes:
+            text = text.decode()
+            
+        galegoe_r = galegoe_regex(text)
+        galegod_r = galegod_regex(text)
+
+        if not galegoe_r and not galegod_r:
+            return -1
+
+        if galegoe_r:
+            await self.sender.sendMessage(galego_encrypt(galegoe_r))
+
+        if galegod_r:
+            await self.sender.sendMessage(galego_decrypt(galegod_r))
         return 0
 
     async def _caesarshift(self, text):
