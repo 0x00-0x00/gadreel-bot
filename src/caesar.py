@@ -26,7 +26,7 @@ class CaesarCipher(object):
     def __init__(self, data):
         if type(data) is bytes:
             data = data.decode()
-        self.data = data
+        self.data = data.upper()
 
     def shift(self, shift_num):
         out = str()
