@@ -29,7 +29,7 @@ Base64 En/Decoder
 
 Morse En/Decoder:
 /morsee PLAINTEXT
-/morsee ``MORSE_CODE``
+/morsee `MORSE_CODE`
 
 Ascii En/Decoder:
 /asciie TEXTO
