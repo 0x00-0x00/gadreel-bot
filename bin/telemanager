@@ -309,8 +309,8 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         if type(text) is bytes:
             text = text.decode()
 
-        help_regex = help_regex(text)
-        if not help_regex:
+        hlp_regex = help_regex(text)
+        if not hlp_regex:
             return -1
 
         await self.sender.sendMessage(HELP_MARKDOWN, parse_mode="Markdown")
