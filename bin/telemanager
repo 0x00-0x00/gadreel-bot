@@ -309,7 +309,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             text = text.decode()
 
         duck_regex = duckduck_regex(text)
-        if not duck_regx:
+        if not duck_regex:
             return -1
 
         if duck_regex:
