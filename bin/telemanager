@@ -413,6 +413,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._morseHandler(original_text)
             await self._asciiconverter(original_text)
             await self._caesarshift(original_text)
+            await self._vigenereCipher(original_text)
 
 
             #  Log the messages
