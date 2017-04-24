@@ -43,6 +43,10 @@ Caesar Cipher En/Decryptor:
 /caesare PLAINTEXT
 /caesard CIPHER
 
+Caesar Box Cipher En/Decryptor:
+/caesarboxe "PLAINTEXT" "N"
+/caesarboxd "CIPHER" "N"
+
 Vignere Cipher En/Decryptor:
 /vigneree "PLAINTEXT" "KEY"
 /vignered "CIPHER" "KEY"

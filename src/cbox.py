@@ -17,7 +17,7 @@ def caesarboxe_regex(message):
 
 def caesarboxd_regex(message):
     message = decode_data(message)
-    regex = '^\/caesarboxd\s+"(?P<data>[a-zA-Z0-9\s]+)"\s+"(?P<key>[0-9]+)"'
+    regex = '^\/caesarboxd\s+"(?P<data>[a-zA-Z0-9\s_]+)"\s+"(?P<key>[0-9]+)"'
     m = re.match(regex, message)
     if not m:
         return None
