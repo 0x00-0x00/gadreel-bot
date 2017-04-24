@@ -8,7 +8,7 @@ logger = Logger("CaesarBoxCipher")
 
 def caesarboxe_regex(message):
     message = decode_data(message)
-    regex = '^\/caesarboxe\s"(?P<data>[a-zA-Z]+)"\s+"(?P<key>[a-zA-Z]+)"'
+    regex = '^\/caesarboxe\s"(?P<data>[a-zA-Z]+)"\s+"(?P<key>[0-9]+)"'
     m = re.match(regex, message)
     if not m:
         return None
@@ -17,7 +17,7 @@ def caesarboxe_regex(message):
 
 def caesarboxd_regex(message):
     message = decode_data(message)
-    regex = '^\/caesarboxd\s"(?P<data>[a-zA-Z]+)"\s+"(?P<key>[a-zA-Z]+)"'
+    regex = '^\/caesarboxd\s"(?P<data>[a-zA-Z]+)"\s+"(?P<key>[0-9]+)"'
     m = re.match(regex, message)
     if not m:
         return None
