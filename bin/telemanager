@@ -28,7 +28,7 @@ from telemanager.helpme import help_regex, HELP_MARKDOWN
 from telemanager.galegocipher import galegoe_regex, galegod_regex
 from telemanager.galegocipher import encryption as galego_encrypt
 from telemanager.galegocipher import decryption as galego_decrypt
-from telemanager.cbox import CaesarBoxCipher, caesarboxe_regex, caesarboxe_regex
+from telemanager.cbox import CaesarBoxCipher, caesarboxe_regex, caesarboxd_regex
 
 
 #  Create the logger object
