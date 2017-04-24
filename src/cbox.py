@@ -1,8 +1,28 @@
 #!/usr/bin/env python3.6
 from shemutils.logger import Logger
+import re
 
 # Static variables
 logger = Logger("CaesarBoxCipher")
+
+
+def caesarboxe_regex(message):
+    message = decode_data(message)
+    regex = '^\/caesarboxe\s"(?P<data>[a-zA-Z]+)"\s+"(?P<key>[a-zA-Z]+)"'
+    m = re.match(regex, message)
+    if not m:
+        return None
+    else:
+        return m.groupdict()
+
+def caesarboxd_regex(message):
+    message = decode_data(message)
+    regex = '^\/caesarboxd\s"(?P<data>[a-zA-Z]+)"\s+"(?P<key>[a-zA-Z]+)"'
+    m = re.match(regex, message)
+    if not m:
+        return None
+    else:
+        return m.groupdict()
 
 def decode_data(data):
     if type(data) is bytes:
