@@ -494,6 +494,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._duckduck(original_text)
             await self._helpme(original_text)
             await self._galegoCipher(original_text)
+            await self._caesarBoxCipher(original_text)
 
             #  Log the messages
             self._log_message(username, text)
