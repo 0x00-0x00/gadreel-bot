@@ -28,6 +28,8 @@ from telemanager.helpme import help_regex, HELP_MARKDOWN
 from telemanager.galegocipher import galegoe_regex, galegod_regex
 from telemanager.galegocipher import encryption as galego_encrypt
 from telemanager.galegocipher import decryption as galego_decrypt
+from telemanager.cbox import CaesarBoxCipher, caesarboxe_regex, caesarboxe_regex
+
 
 #  Create the logger object
 log = Logger("TeleManager")
@@ -161,9 +163,30 @@ class BotHandler(telepot.aio.helper.ChatHandler):
 
         if morse_d:
             to_decode = morse_d
-            print(to_decode)
             decoded_text = morse_decode(to_decode)
             await self.sender.sendMessage(decoded_text)
+
+        return 0
+
+    async def _caesarBoxCipher(self, text):
+        """
+        Caesar Box Transposition Cipher
+        """
+        if type(text) is bytes:
+            text = text.decode()
+
+        cbox_e = caesarboxe_regex(text)
+        cbox_d = caesarboxd_regex(text)
+        if not cbox_e and not cbox_d:
+            return -1
+
+        if cbox_e:
+            c = CaesarBoxCipher(cbox_e["data"], int(cbox_e["key"]))
+            await self.sender.sendMessage(c.encrypt())
+
+        if cbox_d:
+            c = CaesarBoxCipher(cbox_d["data"], int(cbox_d["key"]))
+            await self.sender.sendMessage(c.decrypt())
 
         return 0
 
