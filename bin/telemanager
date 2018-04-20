@@ -234,30 +234,25 @@ class BotHandler(telepot.aio.helper.ChatHandler):
         return 0
 
     async def _check_vpn(self, text):
-	"""
-	Check if VPN is online
-	"""
-
-	if type(text) is bytes:
-	    text = text.decode()
-
-	if vpn_regex(text) is not True:
-	    return None
-
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	
-	try:
-	    s.connect(("watchergp.com", 1194))
-	    status = True
-	    s.close()
-	except:
-	    status = False
-	if status == True:
-	    await self.sender.sendMessage("VPN is online!")
-	else:
-	    await self.sender.sendMessage("VPN is offline!")
-	return 0
-	
+        """
+        Check if VPN is online
+        """
+        if type(text) is bytes:
+            text = text.decode()
+        if vpn_regex(text) is not True:
+            return None
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            s.connect(("watchergp.com", 1194))
+            status = True
+            s.close()
+        except:
+            status = False
+        if status == True:
+            await self.sender.sendMessage("VPN is online!")
+        else:
+            await self.sender.sendMessage("VPN is offline!")
+        return 0
     async def _caesarshift(self, text):
         """
         Caesar Cipher Feature
@@ -499,7 +494,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._duckduck(original_text)
             await self._helpme(original_text)
             await self._galegoCipher(original_text)
-	    await self._check_vpn(original_test)
+            await self._check_vpn(original_test)
             #  Log the messages
             self._log_message(username, text)
 
