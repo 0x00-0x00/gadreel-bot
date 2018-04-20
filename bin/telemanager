@@ -6,6 +6,8 @@ import re
 import os
 import time
 import random
+import socket
+
 
 #  Load external modules
 from shemutils.logger import Logger
@@ -28,6 +30,7 @@ from telemanager.helpme import help_regex, HELP_MARKDOWN
 from telemanager.galegocipher import galegoe_regex, galegod_regex
 from telemanager.galegocipher import encryption as galego_encrypt
 from telemanager.galegocipher import decryption as galego_decrypt
+from telemanager.vpn import vpn_r as vpn_regex
 
 #  Create the logger object
 log = Logger("TeleManager")
@@ -230,6 +233,31 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self.sender.sendMessage(galego_decrypt(galegod_r))
         return 0
 
+    async def _check_vpn(self, text):
+	"""
+	Check if VPN is online
+	"""
+
+	if type(text) is bytes:
+	    text = text.decode()
+
+	if vpn_regex(text) is not True:
+	    return None
+
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	
+	try:
+	    s.connect(("watchergp.com", 1194))
+	    status = True
+	    s.close()
+	except:
+	    status = False
+	if status == True:
+	    await self.sender.sendMessage("VPN is online!")
+	else:
+	    await self.sender.sendMessage("VPN is offline!")
+	return 0
+	
     async def _caesarshift(self, text):
         """
         Caesar Cipher Feature
@@ -471,7 +499,7 @@ class BotHandler(telepot.aio.helper.ChatHandler):
             await self._duckduck(original_text)
             await self._helpme(original_text)
             await self._galegoCipher(original_text)
-
+	    await self._check_vpn(original_test)
             #  Log the messages
             self._log_message(username, text)
 
